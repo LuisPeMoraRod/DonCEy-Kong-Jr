@@ -10,4 +10,11 @@
 #define MAX_BUFFER 300
 #define SA struct sockaddr //socket address
 
+#define WIN_WIDTH 567 //window frame width
+#define WIN_HEIGHT 646 //window frame height
+#define BPP 16 //bits per pixel
+#define MAX_PATH 30
+#define BG_PATH "resources/background.bmp"
+
+
 #endif //CLIENT_CONSTANTS_H
