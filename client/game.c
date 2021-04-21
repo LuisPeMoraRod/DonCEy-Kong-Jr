@@ -20,7 +20,7 @@ void start_game(){
 
     screen = create_background(&screen);
 
-    SDL_Delay(5000);
+    SDL_Delay(50000);
 
     SDL_Quit();
 }
