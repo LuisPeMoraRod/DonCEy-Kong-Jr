@@ -1,3 +1,6 @@
+import Communication.StreamReceiver;
+import Communication.StreamSender;
+
 import java.net.*;
 import java.io.*;
 
