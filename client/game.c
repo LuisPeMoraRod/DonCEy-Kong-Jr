@@ -11,7 +11,6 @@
 //The window to be rendering
 SDL_Window* window = NULL;
 
-
 //The window renderer
 SDL_Renderer* renderer = NULL;
 
@@ -165,14 +164,27 @@ void game_loop(){
             if(event.type == SDL_QUIT )
             {
                 quit = true;
+            } else if (event.type == SDL_KEYDOWN){
+                switch (event.key.keysym.sym) {
+                    case SDLK_d: //move to the right
+                        move_right(&donkey_jr);
+                        break;
+
+                    case SDLK_a: //move to the left
+                        move_left(&donkey_jr);
+                        break;
+
+                    case SDLK_SPACE:
+                        jump(&donkey_jr);
+                        break;
+                }
             }
         }
+        //controls jump and falling movements
+        control_dk_movement(&donkey_jr);
 
         //Clear screen
         SDL_RenderClear( renderer );
-
-        //SDL_Rect dstrect = { x++, y++, 567, 646 };
-        //SDL_RenderCopy(renderer, background_texture, NULL, &dstrect);
 
         //Render background_texture to screen
         SDL_RenderCopy(renderer, background_texture, NULL, NULL );
@@ -183,7 +195,7 @@ void game_loop(){
         //Update screen
         SDL_RenderPresent( renderer );
 
-        //SDL_Delay( 500 );
+        SDL_Delay( DELAY );
     }
 }
 
