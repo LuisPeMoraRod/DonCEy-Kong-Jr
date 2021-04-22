@@ -14,7 +14,7 @@
 #define WIN_HEIGHT 646 //window frame height
 #define BPP 16 //bits per pixel
 #define MAX_PATH 30
-#define BG_PATH "resources/background.bmp"
-
+#define BG_PATH "resources/background.png"
+#define VELOCITY 100
 
 #endif //CLIENT_CONSTANTS_H

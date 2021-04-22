@@ -5,6 +5,7 @@
 #ifndef CLIENT_COMPONENTS_H
 #define CLIENT_COMPONENTS_H
 
+#include <SDL2/SDL.h>
 #include <stdbool.h>
 #include "constants.h"
 

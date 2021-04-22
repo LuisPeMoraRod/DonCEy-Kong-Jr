@@ -5,8 +5,8 @@
 #include "components.h"
 
 struct player{
-    int x_pos;
-    int y_pos;
+    SDL_Rect pos;
+    SDL_Texture *texture;
     char image_path[MAX_PATH];
     int lives;
     bool right_direction;

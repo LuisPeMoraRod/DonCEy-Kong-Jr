@@ -14,9 +14,10 @@
 
 void start_game();
 bool init_window();
-bool load_media();
+SDL_Texture *load_texture(const char path[MAX_PATH]);
 void close_window();
-
+void game_loop();
+void add_player();
 //SDL_Surface * create_background();
 
 #endif //CLIENT_GAME_H
