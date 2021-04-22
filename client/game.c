@@ -121,7 +121,7 @@ void close_window()
 }
 
 SDL_Texture *load_texture(const char path[MAX_PATH]){
-    //The final background_texture
+    //The final texture
     SDL_Texture* newTexture = NULL;
 
     //Load image at specified path
@@ -132,11 +132,11 @@ SDL_Texture *load_texture(const char path[MAX_PATH]){
     }
     else
     {
-        //Create background_texture from surface pixels
+        //Create new texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
         if( newTexture == NULL )
         {
-            printf( "Unable to create background_texture from %s! SDL Error: %s\n", path, SDL_GetError() );
+            printf( "Unable to createtexture from %s! SDL Error: %s\n", path, SDL_GetError() );
         }
 
         //Get rid of old loaded surface
@@ -151,6 +151,9 @@ void game_loop(){
 
     //Event handler
     SDL_Event event;
+
+    struct player *donkey_jr = NULL;
+    donkey_jr = create_player();
 
     //While application is running
     while( !quit )
@@ -173,6 +176,9 @@ void game_loop(){
 
         //Render background_texture to screen
         SDL_RenderCopy(renderer, background_texture, NULL, NULL );
+
+        SDL_Rect pos = donkey_jr->pos;
+        SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, &pos );
 
         //Update screen
         SDL_RenderPresent( renderer );

@@ -11,6 +11,7 @@
 #include <stdbool.h>
 //#include <SDL/SDL.h>
 #include "constants.h"
+#include "components.h"
 
 void start_game();
 bool init_window();
