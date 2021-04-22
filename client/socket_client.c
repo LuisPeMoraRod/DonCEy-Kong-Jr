@@ -51,7 +51,6 @@ void create_socket(){
         printf("\n Socket creation error \n");
         exit(EXIT_FAILURE);
     }
-
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
 
@@ -127,7 +126,7 @@ void create_socket1(){
     //read_stream(&new_socket);
     send_stream(&new_socket);
 
-    // After chatting close the socket
-    //close(sockfd);
+    // After chatting close_window the socket
+    //close_window(sockfd);
 }
 
