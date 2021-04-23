@@ -38,7 +38,7 @@ struct player{
 };
 
 struct player * create_player();
-void free_player();
+void free_player(struct player **donkey_jr_ptr);
 void move_left(struct player **donkey_jr_ptr);
 void move_right(struct player **donkey_jr_ptr);
 void jump(struct player **donkey_jr_ptr);

@@ -105,7 +105,7 @@ bool init_window(){
 void close_window()
 {
     //Free loaded image
-    SDL_DestroyTexture(background_texture );
+    SDL_DestroyTexture(background_texture);
     background_texture = NULL;
 
     //Destroy window
@@ -197,6 +197,8 @@ void game_loop(){
 
         SDL_Delay( DELAY );
     }
+
+    free_player(&donkey_jr); //free resources
 }
 
 

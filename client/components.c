@@ -73,8 +73,8 @@ struct player *create_player(){
     donkey_jr->pos = pos_rect;
     donkey_jr->y_height = y;
 
-    donkey_jr->current_texture = donkey_jr->stand_right;
-    donkey_jr->sprite = STAND_R0;
+    donkey_jr->current_texture = donkey_jr->liana_right0;
+    donkey_jr->sprite = LIANA_R0;
 
     donkey_jr->jump = false;
     donkey_jr->right = true;
@@ -91,7 +91,18 @@ void move_right(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     donkey_jr->right = true;
     donkey_jr->pos.x += MOV;
-    if (donkey_jr->jump) {
+
+    if(!on_platform(&donkey_jr)){
+        donkey_jr->fall = true;
+    }
+
+    if (donkey_jr->fall) {
+        donkey_jr->sprite = JUMP_R;
+        donkey_jr->current_texture = donkey_jr->jump_right;
+        donkey_jr->pos.y += JUMP;
+    }else if (donkey_jr->jump){
+        donkey_jr->sprite = JUMP_R;
+        donkey_jr->current_texture = donkey_jr->jump_right;
         donkey_jr->pos.y -= JUMP;
     } else if (donkey_jr->sprite == STAND_R0){
         donkey_jr->sprite = RUN_R0;
@@ -119,7 +130,13 @@ void move_left(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     donkey_jr->right = false;
     donkey_jr->pos.x -= MOV;
-    if (donkey_jr->jump){
+    if (!on_platform(&donkey_jr) || donkey_jr->fall) {
+        donkey_jr->sprite = JUMP_L;
+        donkey_jr->current_texture = donkey_jr->jump_left;
+        donkey_jr->pos.y += JUMP;
+    }else if (donkey_jr->jump){
+        donkey_jr->sprite = JUMP_L;
+        donkey_jr->current_texture = donkey_jr->jump_left;
         donkey_jr->pos.y -= JUMP;
     }else if (donkey_jr->sprite == STAND_L0){
         donkey_jr->sprite = RUN_L0;
@@ -145,14 +162,16 @@ void move_left(struct player **donkey_jr_ptr){
  */
 void jump(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
-    donkey_jr->jump = true;
-    donkey_jr->pos.y -= JUMP;
-    if (donkey_jr->right){
-        donkey_jr->sprite = JUMP_R;
-        donkey_jr->current_texture = donkey_jr->jump_right;
-    }else{
-        donkey_jr->sprite = JUMP_L;
-        donkey_jr->current_texture = donkey_jr->jump_left;
+    if (!donkey_jr->jump && !donkey_jr->fall){
+        donkey_jr->jump = true;
+        donkey_jr->pos.y -= JUMP;
+        if (donkey_jr->right){
+            donkey_jr->sprite = JUMP_R;
+            donkey_jr->current_texture = donkey_jr->jump_right;
+        }else{
+            donkey_jr->sprite = JUMP_L;
+            donkey_jr->current_texture = donkey_jr->jump_left;
+        }
     }
 }
 /**
@@ -184,6 +203,7 @@ void move_down(struct player **donkey_jr_ptr){
             donkey_jr->sprite = STAND_L0;
             donkey_jr->current_texture = donkey_jr->stand_left;
         }
+        donkey_jr->y_height = donkey_jr->pos.y;
         donkey_jr->fall = false; //stop falling
     }else{
         donkey_jr->pos.y += JUMP; //keep falling
@@ -196,6 +216,26 @@ bool on_platform(struct player **donkey_jr_ptr){
     int y = donkey_jr->pos.y;
     if ( x >= P0_X0 && x <= P0_X1 && y == P0_Y) {
         return true;
+    }else if ( x >= P1_X0 && x <= P1_X1 && y == P1_Y) {
+        return true;
+    }else if ( x >= P2_X0 && x <= P2_X1 && y == P2_Y) {
+        return true;
+    }else if ( x >= P3_X0 && x <= P3_X1 && y == P3_Y) {
+        return true;
+    }else if ( x >= P4_X0 && x <= P4_X1 && y == P4_Y) {
+        return true;
+    }else if ( x >= P5_X0 && x <= P5_X1 && y == P5_Y) {
+        return true;
+    }else if ( x >= P6_X0 && x <= P6_X1 && y == P6_Y) {
+        return true;
+    }else if ( x >= P7_X0 && x <= P7_X1 && y == P7_Y) {
+        return true;
+    }else if ( x >= P8_X0 && x <= P8_X1 && y == P8_Y) {
+        return true;
+    }else if ( x >= P9_X0 && x <= P9_X1 && y == P9_Y) {
+        return true;
+    }else if ( x >= P10_X0 && x <= P10_X1 && y == P10_Y) {
+        return true;
     }
     return false;
 
@@ -205,10 +245,25 @@ void control_dk_movement(struct player **donkey_jr_ptr){
     if(donkey_jr->jump) move_up(&donkey_jr);
     else if (donkey_jr->fall) move_down(&donkey_jr);
 }
+
 /**
  * Free resources of player struct (including graphics)
  */
-void free_player(){
-
+void free_player(struct player **donkey_jr_ptr){
+    struct player *donkey_jr = *donkey_jr_ptr;
+    SDL_DestroyTexture(donkey_jr->current_texture);
+    SDL_DestroyTexture(donkey_jr->run_right1);
+    SDL_DestroyTexture(donkey_jr->run_right0);
+    SDL_DestroyTexture(donkey_jr->run_left0);
+    SDL_DestroyTexture(donkey_jr->run_left1);
+    SDL_DestroyTexture(donkey_jr->stand_right);
+    SDL_DestroyTexture(donkey_jr->stand_left);
+    SDL_DestroyTexture(donkey_jr->jump_right);
+    SDL_DestroyTexture(donkey_jr->jump_left);
+    SDL_DestroyTexture(donkey_jr->liana_right0);
+    SDL_DestroyTexture(donkey_jr->liana_right1);
+    SDL_DestroyTexture(donkey_jr->liana_left0);
+    SDL_DestroyTexture(donkey_jr->liana_left1);
+    free(donkey_jr);
 }
 

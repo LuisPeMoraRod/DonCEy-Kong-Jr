@@ -64,48 +64,97 @@ enum donkey_jr_sprite{
 #define DELAY 10
 
 //platforms
-#define P0_X0 2
-#define P0_X1 115
-#define P0_Y 572
+enum platforms{
+    P0_X0 = 2,
+    P0_X1 = 115,
+    P0_Y = 572,
 
-#define P1_X0 65
-#define P1_X1 180
-#define P1_Y 390
+    P1_X0 = 65,
+    P1_X1 = 180,
+    P1_Y = 390,
 
-#define P2_X0 65
-#define P2_X1 140
-#define P2_Y 268
+    P2_X0 = 65,
+    P2_X1 = 140,
+    P2_Y = 268,
 
-#define P3_X0 180
-#define P3_X1 260
-#define P3_Y 532
+    P3_X0 = 180,
+    P3_X1 = 260,
+    P3_Y = 532,
 
-#define P4_X0 285
-#define P4_X1 340
-#define P4_Y 552
+    P4_X0 = 285,
+    P4_X1 = 340,
+    P4_Y = 552,
 
-#define P5_X0 365
-#define P5_X1 440
-#define P5_Y 532
+    P5_X0 = 365,
+    P5_X1 = 440,
+    P5_Y = 532,
 
-#define P6_X0 467
-#define P6_X1 520
-#define P6_Y 512
+    P6_X0 = 467,
+    P6_X1 = 520,
+    P6_Y = 512,
 
-#define P7_X0 430
-#define P7_X1 520
-#define P7_Y 329
+    P7_X0 = 430,
+    P7_X1 = 520,
+    P7_Y = 329,
 
-#define P8_X0 300
-#define P8_X1 360
-#define P8_Y 167
+    P8_X0 = 300,
+    P8_X1 = 452,
+    P8_Y = 167,
 
-#define P9_X0 5
-#define P9_X1 320
-#define P9_Y 147
+    P9_X0 = 5,
+    P9_X1 = 320,
+    P9_Y = 147,
 
-#define P10_X0 115
-#define P10_X1 180
-#define P10_Y 68
+    P10_X0 = 115,
+    P10_X1 = 180,
+    P10_Y = 68
+};
+
+
+enum lianas{
+    L0_X = 0,
+    L0_Y0 = 200,
+    LO_Y1 = 545,
+
+    L1_X = 35,
+    L1_Y0 = 200,
+    L1_Y1 = 526,
+
+    L2_X = 95,
+    L2_Y0 = 320,
+    L2_Y1 = 455,
+
+    L3_X = 196,
+    L3_Y0 = 200,
+    L3_Y1 = 480,
+
+    L4_X = 276,
+    L4_Y0 = 200,
+    L4_Y1 = 355,
+
+    L5_X = 336,
+    L5_Y0 = 220,
+    L5_Y1 = 480,
+
+    L6_X = 398,
+    L6_Y0 = 220,
+    L6_Y1 = 440,
+
+    L7_X = 460,
+    L7_Y0 = 110,
+    L7_Y1 = 480,
+
+    L8_X = 520,
+    L8_Y0 = 110,
+    L8_Y1 = 480,
+
+    L9_X = 315,
+    L9_Y0 = 50,
+    L9_Y1 = 95,
+
+    L10_X = 195,
+    L10_Y0 = 50,
+    L10_Y1 = 95
+};
 
 #endif //CLIENT_CONSTANTS_H
