@@ -31,13 +31,13 @@
 #define DK_STAND_L "resources/donkey_jr/stand_left.png"
 
 //initial positons
-#define DK_X0 2;
-#define DK_Y0 572;
+#define DK_X0 2
+#define DK_Y0 572
 
 //movement distances
 #define JUMP 1
 #define MOV 8
-#define JUMP_DIFF 45
+#define JUMP_DIFF 60
 
 //enum for sprites
 enum donkey_jr_sprite{
@@ -114,7 +114,7 @@ enum platforms{
 enum lianas{
     L0_X = 0,
     L0_Y0 = 200,
-    LO_Y1 = 545,
+    L0_Y1 = 545,
 
     L1_X = 35,
     L1_Y0 = 200,
@@ -122,7 +122,7 @@ enum lianas{
 
     L2_X = 95,
     L2_Y0 = 320,
-    L2_Y1 = 455,
+    L2_Y1 = 545,
 
     L3_X = 196,
     L3_Y0 = 200,
@@ -156,5 +156,7 @@ enum lianas{
     L10_Y0 = 50,
     L10_Y1 = 95
 };
+
+#define WIDTH_LIANA 23
 
 #endif //CLIENT_CONSTANTS_H

@@ -42,9 +42,12 @@ void free_player(struct player **donkey_jr_ptr);
 void move_left(struct player **donkey_jr_ptr);
 void move_right(struct player **donkey_jr_ptr);
 void jump(struct player **donkey_jr_ptr);
-void move_up(struct player **donkey_jr_ptr);
-void move_down(struct player **donkey_jr_ptr);
+void jumping(struct player **donkey_jr_ptr);
+void falling(struct player **donkey_jr_ptr);
 void control_dk_movement(struct player **donkey_jr_ptr);
 bool on_platform(struct player **donkey_jr_ptr);
+bool reached_liana(struct player **donkey_jr_ptr);
+void r_side_liana(struct player ** donkey_jr_ptr);
+void l_side_liana(struct player ** donkey_jr_ptr);
 
 #endif //CLIENT_COMPONENTS_H

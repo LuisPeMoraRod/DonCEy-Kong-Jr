@@ -167,11 +167,19 @@ void game_loop(){
             } else if (event.type == SDL_KEYDOWN){
                 switch (event.key.keysym.sym) {
                     case SDLK_d: //move to the right
-                        move_right(&donkey_jr);
+                        if(donkey_jr->liana){
+                            r_side_liana(&donkey_jr);
+                        }else{
+                            move_right(&donkey_jr);
+                        }
                         break;
 
                     case SDLK_a: //move to the left
-                        move_left(&donkey_jr);
+                        if(donkey_jr->liana){
+                            l_side_liana(&donkey_jr);
+                        }else{
+                            move_left(&donkey_jr);
+                        }
                         break;
 
                     case SDLK_SPACE:
