@@ -12,7 +12,6 @@
 
 #define WIN_WIDTH 567 //window frame width
 #define WIN_HEIGHT 646 //window frame height
-#define BPP 16 //bits per pixel
 #define MAX_PATH 30
 
 //images paths
@@ -29,6 +28,16 @@
 #define DK_LIANA_L1 "resources/donkey_jr/liana_left1.png"
 #define DK_STAND_R "resources/donkey_jr/stand_right.png"
 #define DK_STAND_L "resources/donkey_jr/stand_left.png"
+
+//crocodiles
+#define C_RED_UP0 "resources/enemies/red_croc_up0.png"
+#define C_RED_UP1 "resources/enemies/red_croc_up1.png"
+#define C_RED_DOWN0 "resources/enemies/red_croc_down0.png"
+#define C_RED_DOWN1 "resources/enemies/red_croc_down1.png"
+#define C_BLUE_UP0 "resources/enemies/blue_croc_up0.png"
+#define C_BLUE_UP1 "resources/enemies/blue_croc_up1.png"
+#define C_BLUE_DOWN0 "resources/enemies/blue_croc_down0.png"
+#define C_BLUE_DOWN1 "resources/enemies/blue_croc_down1.png"
 
 //initial positons
 #define DK_X0 2
@@ -57,15 +66,29 @@ enum donkey_jr_sprite{
     STAND_L1
 };
 
+enum crocs_sprite{
+    RED_UP0,
+    RED_UP1,
+    RED_DOWN0,
+    RED_DOWN1,
+    BLUE_UP0,
+    BLUE_UP1,
+    BLUE_DOWN0,
+    BLUE_DOWN1
+};
+
 //Donkey Kong Jr size
 #define DKJR_WIDTH 50
 #define DKJR_HEIGHT 34
+#define CROC_WIDTH 24
+#define CROC_HEIGHT 48
+#define CROC_ADJ 30
 
 #define DELAY 10
 
 //platforms
 enum platforms{
-    P0_X0 = 2,
+    P0_X0 = 0,
     P0_X1 = 115,
     P0_Y = 572,
 
@@ -110,8 +133,20 @@ enum platforms{
     P10_Y = 68
 };
 
-
 enum lianas{
+    LIANA0,
+    LIANA1,
+    LIANA2,
+    LIANA3,
+    LIANA4,
+    LIANA5,
+    LIANA6,
+    LIANA7,
+    LIANA8,
+    LIANA9,
+    LIANA10
+};
+enum lianas_ranges{
     L0_X = 0,
     L0_Y0 = 200,
     L0_Y1 = 545,

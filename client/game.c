@@ -1,9 +1,6 @@
-//
-// Created by luispedro on 21/4/21.
-//
 
 //
-// Created by luispedro on 20/4/21.
+// Created by Luis Pedro Morales on 20/4/21.
 //
 
 #include "game.h"
@@ -22,7 +19,7 @@ SDL_Texture* background_texture = NULL;
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
 void start_game(){
-    //Start up SDL and create window
+    //Start is_up SDL and create window
     if( !init_window() )
     {
         printf( "Failed to initialize!\n" );
@@ -154,9 +151,15 @@ void game_loop(){
     struct player *donkey_jr = NULL;
     donkey_jr = create_player();
 
+    SDL_Rect *pos = NULL;
+
+    int cont_temp = 0;
+    struct red_croc *croc = NULL;
+
     //While application is running
     while( !quit )
     {
+        quit = death(&donkey_jr);
         //Handle events on queue
         while(SDL_PollEvent( &event ) != 0 )
         {
@@ -166,6 +169,7 @@ void game_loop(){
                 quit = true;
             } else if (event.type == SDL_KEYDOWN){
                 switch (event.key.keysym.sym) {
+
                     case SDLK_d: //move to the right
                         if(donkey_jr->liana){
                             r_side_liana(&donkey_jr);
@@ -182,14 +186,33 @@ void game_loop(){
                         }
                         break;
 
+                    case SDLK_w: //climb is_up the liana
+                        if(donkey_jr->liana){
+                            move_up(&donkey_jr);
+                        }
+                        break;
+
+                    case SDLK_s:
+                        if(donkey_jr->liana){
+                            move_down(&donkey_jr);
+                        }
+                        break;
+
                     case SDLK_SPACE:
                         jump(&donkey_jr);
                         break;
+
+                    case SDLK_c:
+                        croc = create_red_croc(cont_temp);
+                        cont_temp++;
+                        break;;
+
                 }
             }
         }
         //controls jump and falling movements
         control_dk_movement(&donkey_jr);
+
 
         //Clear screen
         SDL_RenderClear( renderer );
@@ -197,8 +220,14 @@ void game_loop(){
         //Render background_texture to screen
         SDL_RenderCopy(renderer, background_texture, NULL, NULL );
 
-        SDL_Rect pos = donkey_jr->pos;
-        SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, &pos );
+        pos = &donkey_jr->pos;
+        SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
+
+        if(croc != NULL){
+            pos = &croc->pos;
+            SDL_RenderCopy(renderer, croc->current_texture, NULL, pos);
+
+        }
 
         //Update screen
         SDL_RenderPresent( renderer );
@@ -207,6 +236,7 @@ void game_loop(){
     }
 
     free_player(&donkey_jr); //free resources
+    free_red_croc(&croc);
 }
 
 

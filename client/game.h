@@ -1,5 +1,5 @@
 //
-// Created by luispedro on 20/4/21.
+// Created by Luis Pedro Morales on 20/4/21.
 //
 
 #ifndef CLIENT_GAME_H
@@ -9,9 +9,9 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <stdbool.h>
-//#include <SDL/SDL.h>
 #include "constants.h"
-#include "components.h"
+#include "player.h"
+#include "enemies.h"
 
 void start_game();
 bool init_window();

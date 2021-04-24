@@ -1,9 +1,9 @@
 //
-// Created by luispedro on 20/4/21.
+// Created by Luis Pedro Morales on 20/4/21.
 //
 
-#ifndef CLIENT_COMPONENTS_H
-#define CLIENT_COMPONENTS_H
+#ifndef CLIENT_PLAYER_H
+#define CLIENT_PLAYER_H
 
 #include <SDL2/SDL.h>
 #include <stdbool.h>
@@ -27,7 +27,7 @@ struct player{
     SDL_Texture *stand_right;
     SDL_Texture *stand_left;
 
-    int y_height;
+    int y_jump;
 
     int sprite;
     int lives;
@@ -41,6 +41,8 @@ struct player * create_player();
 void free_player(struct player **donkey_jr_ptr);
 void move_left(struct player **donkey_jr_ptr);
 void move_right(struct player **donkey_jr_ptr);
+void move_up(struct player **donkey_jr_ptr);
+void move_down(struct player **donkey_jr_ptr);
 void jump(struct player **donkey_jr_ptr);
 void jumping(struct player **donkey_jr_ptr);
 void falling(struct player **donkey_jr_ptr);
@@ -49,5 +51,8 @@ bool on_platform(struct player **donkey_jr_ptr);
 bool reached_liana(struct player **donkey_jr_ptr);
 void r_side_liana(struct player ** donkey_jr_ptr);
 void l_side_liana(struct player ** donkey_jr_ptr);
+bool death(struct player **donkey_jr_ptr);
+bool top_liana(struct player **donkey_jr_ptr);
+bool fall_liana(struct player **donkey_jr_ptr);
 
-#endif //CLIENT_COMPONENTS_H
+#endif //CLIENT_PLAYER_H

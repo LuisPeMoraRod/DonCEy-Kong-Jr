@@ -1,8 +1,8 @@
 //
-// Created by luispedro on 20/4/21.
+// Created by Luis Pedro Morales on 20/4/21.
 //
 
-#include "components.h"
+#include "player.h"
 
 /**
  * Creates Donkey Kong Jr struct object
@@ -71,7 +71,7 @@ struct player *create_player(){
     int x = DK_X0; int y = DK_Y0; //initial position
     SDL_Rect pos_rect = {x, y, DKJR_WIDTH, DKJR_HEIGHT};
     donkey_jr->pos = pos_rect;
-    donkey_jr->y_height = y;
+    donkey_jr->y_jump = y;
 
     donkey_jr->current_texture = donkey_jr->stand_right;
     donkey_jr->sprite = STAND_R0;
@@ -123,20 +123,6 @@ void move_right(struct player **donkey_jr_ptr){
 }
 
 /**
- * Switches to right side of the liana
- * @param donkey_jr_ptr: struct player **
- */
-void r_side_liana(struct player ** donkey_jr_ptr){
-    struct player *donkey_jr = *donkey_jr_ptr;
-    if(donkey_jr->right) {
-        donkey_jr->right = false;
-        donkey_jr->pos.x += WIDTH_LIANA;
-        donkey_jr->sprite = LIANA_L0;
-        donkey_jr->current_texture = donkey_jr->liana_left0;
-    }
-}
-
-/**
  * Moves sprite to the left
  * @param donkey_jr_ptr: struct player **
  */
@@ -145,7 +131,10 @@ void move_left(struct player **donkey_jr_ptr){
     if (donkey_jr->pos.x-MOV >= DK_X0){
         donkey_jr->right = false;
         donkey_jr->pos.x -= MOV;
-        if (!on_platform(&donkey_jr) || donkey_jr->fall) {
+        if(!on_platform(&donkey_jr)){
+            donkey_jr->fall = true;
+        }
+        if (donkey_jr->fall) {
             donkey_jr->sprite = JUMP_L;
             donkey_jr->current_texture = donkey_jr->jump_left;
             donkey_jr->pos.y += JUMP;
@@ -173,6 +162,77 @@ void move_left(struct player **donkey_jr_ptr){
 }
 
 /**
+ * Moves is_up the liana (alternates climbing sprites for movement visual sensation)
+ * @param donkey_jr_ptr: struct player **
+ */
+void move_up(struct player **donkey_jr_ptr){
+    struct player *donkey_jr = *donkey_jr_ptr;
+    if (!top_liana(donkey_jr_ptr)){
+        donkey_jr->pos.y-=MOV;
+        if(donkey_jr->sprite == LIANA_L0){
+            donkey_jr->sprite = LIANA_L1;
+            donkey_jr->current_texture = donkey_jr->liana_left1;
+        }else if(donkey_jr->sprite == LIANA_L1){
+            donkey_jr->sprite = LIANA_L0;
+            donkey_jr->current_texture = donkey_jr->liana_left0;
+        }else if(donkey_jr->sprite == LIANA_R0){
+            donkey_jr->sprite = LIANA_R1;
+            donkey_jr->current_texture = donkey_jr->liana_right1;
+        }else if(donkey_jr->sprite == LIANA_R1){
+            donkey_jr->sprite = LIANA_R0;
+            donkey_jr->current_texture = donkey_jr->liana_right0;
+        }
+    }
+}
+
+/**
+ * Moves down the liana (alternates climbing sprites for movement visual sensation)
+ * @param donkey_jr_ptr: struct player **
+ */
+void move_down(struct player **donkey_jr_ptr){
+    struct player *donkey_jr = *donkey_jr_ptr;
+    donkey_jr->pos.y+=MOV;
+    if (fall_liana(donkey_jr_ptr)){
+        donkey_jr->fall = true;
+        donkey_jr->liana = false;
+        if(donkey_jr->right){
+            donkey_jr->sprite = JUMP_R;
+            donkey_jr->current_texture = donkey_jr->jump_right;
+        }else{
+            donkey_jr->sprite = JUMP_L;
+            donkey_jr->current_texture = donkey_jr->jump_left;
+        }
+    }else if(donkey_jr->sprite == LIANA_L0){
+        donkey_jr->sprite = LIANA_L1;
+        donkey_jr->current_texture = donkey_jr->liana_left1;
+    }else if(donkey_jr->sprite == LIANA_L1){
+        donkey_jr->sprite = LIANA_L0;
+        donkey_jr->current_texture = donkey_jr->liana_left0;
+    }else if(donkey_jr->sprite == LIANA_R0){
+        donkey_jr->sprite = LIANA_R1;
+        donkey_jr->current_texture = donkey_jr->liana_right1;
+    }else if(donkey_jr->sprite == LIANA_R1){
+        donkey_jr->sprite = LIANA_R0;
+        donkey_jr->current_texture = donkey_jr->liana_right0;
+    }
+}
+
+/**
+ * Switches to right side of the liana
+ * @param donkey_jr_ptr: struct player **
+ */
+void r_side_liana(struct player ** donkey_jr_ptr){
+    struct player *donkey_jr = *donkey_jr_ptr;
+    if(donkey_jr->right) {
+        donkey_jr->right = false;
+        donkey_jr->pos.x += WIDTH_LIANA;
+        donkey_jr->sprite = LIANA_L0;
+        donkey_jr->current_texture = donkey_jr->liana_left0;
+    }
+}
+
+
+/**
  * Switches to left side of the liana
  * @param donkey_jr_ptr: struct player **
  */
@@ -193,7 +253,7 @@ void l_side_liana(struct player ** donkey_jr_ptr){
 void jump(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     if (!donkey_jr->jump && !donkey_jr->fall){
-        donkey_jr->y_height = donkey_jr->pos.y;
+        donkey_jr->y_jump = donkey_jr->pos.y;
         donkey_jr->jump = true;
         donkey_jr->liana = false;
         donkey_jr->pos.y -= JUMP;
@@ -207,12 +267,12 @@ void jump(struct player **donkey_jr_ptr){
     }
 }
 /**
- * Moves Donkey Kong Jr up until a certain height given by JUMP_DIFF
+ * Moves Donkey Kong Jr is_up until a certain height given by JUMP_DIFF
  * @param donkey_jr_ptr: struct player **
  */
 void jumping(struct player **donkey_jr_ptr){
     struct player * donkey_jr = *donkey_jr_ptr;
-    int difference = donkey_jr->y_height - donkey_jr->pos.y;
+    int difference = donkey_jr->y_jump - donkey_jr->pos.y;
     if (difference >= JUMP_DIFF){
         donkey_jr->jump = false; //end jump routine
         donkey_jr->fall = true;
@@ -233,13 +293,15 @@ void falling(struct player **donkey_jr_ptr){
             if (!(x >= L0_X && x <= (L0_X + WIDTH_LIANA))){
                 donkey_jr->pos.x += WIDTH_LIANA;
             }
+            donkey_jr->right = false;
             donkey_jr->sprite = LIANA_L0;
             donkey_jr->current_texture = donkey_jr->liana_left0;
         }else{
+            donkey_jr->right = true;
             donkey_jr->sprite = LIANA_R0;
             donkey_jr->current_texture = donkey_jr->liana_right0;
         }
-        donkey_jr->y_height = donkey_jr->pos.y;
+        donkey_jr->y_jump = donkey_jr->pos.y;
         donkey_jr->fall = false; //stop falling
         donkey_jr->liana = true;
     }else if (on_platform(&donkey_jr)){
@@ -250,7 +312,7 @@ void falling(struct player **donkey_jr_ptr){
             donkey_jr->sprite = STAND_L0;
             donkey_jr->current_texture = donkey_jr->stand_left;
         }
-        donkey_jr->y_height = donkey_jr->pos.y;
+        donkey_jr->y_jump = donkey_jr->pos.y;
         donkey_jr->liana = false;
         donkey_jr->fall = false; //stop falling
     }else{
@@ -340,11 +402,95 @@ bool on_platform(struct player **donkey_jr_ptr){
      }
      return false;
  }
+
+ /**
+  * Checks if Donkey Kong Jr has reached the top of the liana
+  * @param donkey_jr_ptr: struct player **
+  * @return bool
+  */
+ bool top_liana(struct player **donkey_jr_ptr){
+     struct player *donkey_jr = *donkey_jr_ptr;
+     int x = donkey_jr->pos.x;
+     int y = donkey_jr->pos.y - MOV;
+     if (y < L0_Y0 && y && x >= L0_X && x<= (L0_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L1_Y0 && y && x >= L1_X && x<= (L1_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L2_Y0 && y && x >= L2_X && x<= (L2_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L3_Y0 && y && x >= L3_X && x<= (L3_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L4_Y0 && y && x >= L4_X && x<= (L4_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L5_Y0 && y && x >= L5_X && x<= (L5_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L6_Y0 && y && x >= L6_X && x<= (L6_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L7_Y0 && y && x >= L7_X && x<= (L7_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L8_Y0 && y && x >= L8_X && x<= (L8_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L9_Y0 && y && x >= L9_X && x<= (L9_X + WIDTH_LIANA)){
+         return true;
+     }else if (y < L10_Y0 && y && x >= L10_X && x<= (L10_X + WIDTH_LIANA)) {
+         return true;
+     }
+     return false;
+ }
+
+ bool fall_liana(struct player **donkey_jr_ptr){
+     struct player *donkey_jr = *donkey_jr_ptr;
+     int x = donkey_jr->pos.x;
+     int y = donkey_jr->pos.y;
+     if (y > L0_Y1 && y && x >= L0_X && x<= (L0_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L1_Y1 && y && x >= L1_X && x<= (L1_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L2_Y1 && y && x >= L2_X && x<= (L2_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L3_Y1 && y && x >= L3_X && x<= (L3_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L4_Y1 && y && x >= L4_X && x<= (L4_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L5_Y1 && y && x >= L5_X && x<= (L5_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L6_Y1 && y && x >= L6_X && x<= (L6_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L7_Y1 && y && x >= L7_X && x<= (L7_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L8_Y1 && y && x >= L8_X && x<= (L8_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L9_Y1 && y && x >= L9_X && x<= (L9_X + WIDTH_LIANA)){
+         return true;
+     }else if (y > L10_Y1 && y && x >= L10_X && x<= (L10_X + WIDTH_LIANA)) {
+         return true;
+     }
+     return false;
+ }
+
+ /**
+  * Controls jumping and falling Donkey Kong Jr's movements in game loop
+  * @param donkey_jr_ptr
+  */
 void control_dk_movement(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     if(donkey_jr->jump) jumping(&donkey_jr);
     else if (donkey_jr->fall) falling(&donkey_jr);
 }
+
+/**
+ * Checks if Donkey Kong Jr felt to the water or collided with a crocodile
+ * @param donkey_jr_ptr
+ * @return
+ */
+bool death(struct player **donkey_jr_ptr){
+    struct player *donkey_jr = *donkey_jr_ptr;
+    if(donkey_jr->pos.y >= WIN_HEIGHT){
+        return true;
+    }
+    return false;
+}
+
 
 /**
  * Free resources of player struct (including graphics)
