@@ -153,8 +153,10 @@ void game_loop(){
 
     SDL_Rect *pos = NULL;
 
+    struct node * first_croc = NULL;
+    struct node * last_croc = NULL;
+    struct blue_croc *croc = NULL;
     int cont_temp = 0;
-    struct red_croc *croc = NULL;
 
     //While application is running
     while( !quit )
@@ -203,7 +205,8 @@ void game_loop(){
                         break;
 
                     case SDLK_c:
-                        croc = create_red_croc(cont_temp);
+                        croc = create_blue_croc(cont_temp);
+                        add_blue_croc(&first_croc, &last_croc, &croc);
                         cont_temp++;
                         break;;
 
@@ -212,7 +215,6 @@ void game_loop(){
         }
         //controls jump and falling movements
         control_dk_movement(&donkey_jr);
-
 
         //Clear screen
         SDL_RenderClear( renderer );
@@ -223,10 +225,9 @@ void game_loop(){
         pos = &donkey_jr->pos;
         SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
 
-        if(croc != NULL){
-            pos = &croc->pos;
-            SDL_RenderCopy(renderer, croc->current_texture, NULL, pos);
-
+        //paint all crocs
+        if(first_croc != NULL){
+            render_crocs(&renderer, &first_croc);
         }
 
         //Update screen
@@ -236,7 +237,7 @@ void game_loop(){
     }
 
     free_player(&donkey_jr); //free resources
-    free_red_croc(&croc);
+    free_croc_list(&first_croc);
 }
 
 

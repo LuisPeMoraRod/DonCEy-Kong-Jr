@@ -82,7 +82,7 @@ enum crocs_sprite{
 #define DKJR_HEIGHT 34
 #define CROC_WIDTH 24
 #define CROC_HEIGHT 48
-#define CROC_ADJ 30
+#define CROC_ADJ 30 //adjust in x for croc positioning in lianas
 
 #define DELAY 10
 

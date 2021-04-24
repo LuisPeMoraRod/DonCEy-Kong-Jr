@@ -1,7 +1,6 @@
 //
 // Created by Luis Pedro Morales on 20/4/21.
 //
-
 #include "player.h"
 
 /**
@@ -356,7 +355,6 @@ bool on_platform(struct player **donkey_jr_ptr){
 
 }
 
-
 /**
  * Checks if Donkey Kong Jr has reached a liana
  * @param donkey_jr_ptr: struct player **
@@ -438,6 +436,11 @@ bool on_platform(struct player **donkey_jr_ptr){
      return false;
  }
 
+/**
+ * Checks if Donkey Kong Jr has reached the end of the liana
+ * @param donkey_jr_ptr: struct player **
+ * @return bool
+ */
  bool fall_liana(struct player **donkey_jr_ptr){
      struct player *donkey_jr = *donkey_jr_ptr;
      int x = donkey_jr->pos.x;
