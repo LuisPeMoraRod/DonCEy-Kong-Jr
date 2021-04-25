@@ -504,6 +504,15 @@ void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
             pos = &blue->pos;
         }
 
+        if (pos->x == L0_X){
+            if(is_collision(x_dkr, y_dkjr, pos->x , pos->y, CROC_WIDTH, CROC_HEIGHT)){ //exception for first liana
+                donkey_jr->is_dead = true;
+                donkey_jr->fall = true;
+                donkey_jr->lives -= 1;
+                donkey_jr->sprite = DEATH;
+                donkey_jr->current_texture = donkey_jr->death;
+            }
+        }
         if(is_collision(x_dkr, y_dkjr, pos->x - CROC_ADJ, pos->y, CROC_WIDTH, CROC_HEIGHT)){
             donkey_jr->is_dead = true;
             donkey_jr->fall = true;
@@ -516,9 +525,9 @@ void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
 }
 
 bool is_collision(int x0, int y0, int x1, int y1, int width, int height){
-    if((x0 < x1) && (x0 + DKJR_WIDTH > x1) && (y0 == y1)) return true;
+    if((x0 < x1) && (x0 + DKJR_WIDTH/2 > x1) && (y0 == y1)) return true;
     else if ((x1 < x0) && (x1 + width > x0) && (y0 == y1)) return true;
-    else if ((y0 < y1) && (y0 + DKJR_WIDTH > y1) && (x0 == x1)) return true;
+    else if ((y0 < y1) && (y0 + DKJR_WIDTH/2 > y1) && (x0 == x1)) return true;
     else if ((y1 < y0) && (y1 + height > y0) && (x0 == x1)) return true;
     return false;
 }
