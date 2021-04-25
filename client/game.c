@@ -198,6 +198,10 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
     struct blue_croc *croc = NULL;
     int cont_temp = 0;
 
+    struct fruit * first_fruit = NULL;
+    struct fruit * last_fruit = NULL;
+    struct fruit * temp_fruit = NULL;
+
     //While application is running
     while( !quit )
     {
@@ -249,7 +253,11 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
                         //add_red_croc(&first_croc, &last_croc, &croc);
                         croc = create_blue_croc(renderer_ptr, cont_temp);
                         add_blue_croc(&first_croc, &last_croc, &croc);
+
+                        temp_fruit = create_fruit(&first_fruit, &last_fruit, renderer_ptr, cont_temp, APPLE, 100);
+                        add_fruit(&first_fruit, &last_fruit, &temp_fruit);
                         cont_temp++;
+
                         break;;
 
                 }
@@ -275,6 +283,8 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
             render_crocs(&renderer, &first_croc);
         }
 
+        if (first_fruit != NULL) render_fruits(&renderer, &first_fruit);
+
         //Update screen
         SDL_RenderPresent( renderer );
 
@@ -283,4 +293,5 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
 
     free_player(&donkey_jr); //free resources
     free_croc_list(&first_croc);
+    free_fruits_list(&first_fruit);
 }

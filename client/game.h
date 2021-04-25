@@ -12,6 +12,7 @@
 #include "constants.h"
 #include "player.h"
 #include "enemies.h"
+#include "fruits.h"
 
 void start_game();
 SDL_Window *init_wdw();

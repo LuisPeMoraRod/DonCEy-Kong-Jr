@@ -306,7 +306,6 @@ void render_crocs(SDL_Renderer ** renderer_ptr, struct node **first){
         }
         temp_ptr = temp_ptr->next_node;
     }
-
 }
 
 /**

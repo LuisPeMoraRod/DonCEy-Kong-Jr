@@ -59,13 +59,16 @@
 #define KEY_HEIGHT 36
 
 //fruits
-#define APPLE "resources/apple.png"
-#define BANANA "resources/banana.png"
-#define MANGO "resources/mango.png"
+#define APPLE_PATH "resources/apple.png"
+#define BANANA_PATH "resources/banana.png"
+#define MANGO_PATH "resources/mango.png"
+
+#define FRUIT_WIDTH 28
+#define FRUIT_HEIGHT 30
 
 //initial positons
-#define DK_X0 312//2
-#define DK_Y0 552//572
+#define DK_X0 2
+#define DK_Y0 572
 
 //movement distances
 #define JUMP 1
@@ -260,6 +263,12 @@ enum fruits_pos{
 
     F9_X = 493,
     F9_Y = 512
+};
+
+enum fruit_type{
+    APPLE,
+    BANANA,
+    MANGO
 };
 
 #define WIDTH_LIANA 23
