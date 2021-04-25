@@ -80,6 +80,9 @@ struct player *create_player(SDL_Renderer **renderer_ptr){
     donkey_jr->fall = false;
     donkey_jr->liana = false;
 
+    donkey_jr->lives = 3;
+    donkey_jr->points = 0;
+
     return donkey_jr;
 }
 

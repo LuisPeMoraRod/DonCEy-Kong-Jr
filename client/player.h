@@ -30,6 +30,7 @@ struct player{
     int y_jump;
 
     int sprite;
+    int points;
     int lives;
     bool right;
     bool liana;

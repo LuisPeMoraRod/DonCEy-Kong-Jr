@@ -64,8 +64,8 @@
 #define MANGO "resources/mango.png"
 
 //initial positons
-#define DK_X0 2
-#define DK_Y0 572
+#define DK_X0 312//2
+#define DK_Y0 552//572
 
 //movement distances
 #define JUMP 1
@@ -216,6 +216,50 @@ enum lianas_ranges{
     L10_X = 195,
     L10_Y0 = 50,
     L10_Y1 = 95
+};
+
+enum fruits{
+    FRUIT0,
+    FRUIT1,
+    FRUIT2,
+    FRUIT3,
+    FRUIT4,
+    FRUIT5,
+    FRUIT6,
+    FRUIT7,
+    FRUIT8,
+    FRUIT9,
+};
+enum fruits_pos{
+    F0_X = 200,
+    F0_Y = 147,
+
+    F1_X = 420,
+    F1_Y = 167,
+
+    F2_X = 120,
+    F2_Y = 268,
+
+    F3_X = 160,
+    F3_Y = 390,
+
+    F4_X = 450,
+    F4_Y = 329,
+
+    F5_X = 95,
+    F5_Y = 572,
+
+    F6_X = 220,
+    F6_Y = 532,
+
+    F7_X = 312,
+    F7_Y = 552,
+
+    F8_X = 402,
+    F8_Y = 532,
+
+    F9_X = 493,
+    F9_Y = 512
 };
 
 #define WIDTH_LIANA 23
