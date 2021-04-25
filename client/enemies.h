@@ -34,8 +34,7 @@ struct blue_croc{
     SDL_Texture *down0;
     SDL_Texture *down1;
     int sprite;
-    bool is_up;
-    bool fall;
+    bool dissapeared;
 };
 
 struct node{

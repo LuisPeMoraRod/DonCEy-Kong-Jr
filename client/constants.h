@@ -86,6 +86,7 @@ enum crocs_sprite{
 #define CROC_ADJ 30 //adjust in x for croc positioning in lianas
 
 #define DELAY 10
+#define DELAY_CROCS 10
 
 //platforms
 enum platforms{

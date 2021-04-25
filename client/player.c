@@ -414,11 +414,11 @@ bool on_platform(struct player **donkey_jr_ptr){
          return true;
      }else if (y < L2_Y0 && y && x >= L2_X && x<= (L2_X + WIDTH_LIANA)){
          return true;
-     }else if (y < L3_Y0 && y && x >= L3_X && x<= (L3_X + WIDTH_LIANA)){
+     }else if (y < L3_Y0 && y > L10_Y1 && y && x >= L3_X && x<= (L3_X + WIDTH_LIANA)){
          return true;
      }else if (y < L4_Y0 && y && x >= L4_X && x<= (L4_X + WIDTH_LIANA)){
          return true;
-     }else if (y < L5_Y0 && y && x >= L5_X && x<= (L5_X + WIDTH_LIANA)){
+     }else if (y < L5_Y0 && y > L9_Y1 && y && x >= L5_X && x<= (L5_X + WIDTH_LIANA)){
          return true;
      }else if (y < L6_Y0 && y && x >= L6_X && x<= (L6_X + WIDTH_LIANA)){
          return true;
@@ -458,9 +458,9 @@ bool on_platform(struct player **donkey_jr_ptr){
          return true;
      }else if (y > L8_Y1 && y && x >= L8_X && x<= (L8_X + WIDTH_LIANA)){
          return true;
-     }else if (y > L9_Y1 && y && x >= L9_X && x<= (L9_X + WIDTH_LIANA)){
+     }else if (y > L9_Y1 && y < L5_Y0 && y && x >= L9_X && x<= (L9_X + WIDTH_LIANA)){
          return true;
-     }else if (y > L10_Y1 && y && x >= L10_X && x<= (L10_X + WIDTH_LIANA)) {
+     }else if (y > L10_Y1 && y < L3_Y0 && y && x >= L10_X && x<= (L10_X + WIDTH_LIANA)) {
          return true;
      }
      return false;

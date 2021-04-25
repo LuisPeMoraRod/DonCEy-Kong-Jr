@@ -155,7 +155,8 @@ void game_loop(){
 
     struct node * first_croc = NULL;
     struct node * last_croc = NULL;
-    struct red_croc *croc = NULL;
+    //struct red_croc *croc = NULL;
+    struct blue_croc *croc = NULL;
     int cont_temp = 0;
 
     //While application is running
@@ -205,8 +206,10 @@ void game_loop(){
                         break;
 
                     case SDLK_c:
-                        croc = create_red_croc(cont_temp);
-                        add_red_croc(&first_croc, &last_croc, &croc);
+                        //croc = create_red_croc(cont_temp);
+                        //add_red_croc(&first_croc, &last_croc, &croc);
+                        croc = create_blue_croc(cont_temp);
+                        add_blue_croc(&first_croc, &last_croc, &croc);
                         cont_temp++;
                         break;;
 
