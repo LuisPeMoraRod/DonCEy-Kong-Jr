@@ -30,7 +30,16 @@ void start_game(){
             const char *background_path = BG_PATH;
             background_texture = load_texture(&renderer, background_path);
             if (background_texture != NULL) {
-                game_loop(&renderer, &background_texture);
+                size_t size = sizeof (struct stats);
+                struct stats * player_stats = malloc(size);
+                player_stats->lives = LIVES;
+                player_stats->points = 0;
+                player_stats->level = 1;
+                while (player_stats->lives >= 0){
+                    player_stats = game_loop(&renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
+                }
+                free(player_stats);
+
             } else {
                 printf("Failed to load media!\n");
             }
@@ -42,8 +51,8 @@ void start_game(){
 }
 
 /**
- * Creates windor
- * @return SDL_Window *
+ * Creates window
+ * @return SDL_Window
  */
 SDL_Window * init_wdw(){
     SDL_Window *window = NULL;
@@ -151,7 +160,10 @@ SDL_Texture *load_texture(SDL_Renderer **renderer_ptr, const char path[MAX_PATH]
 
     return newTexture;
 }
-
+/**
+ * Adds images of imprisoned Donkey Kong, Mario and Key
+ * @param renderer_ptr: SDL_Renderer **
+ */
 void add_static_textures(SDL_Renderer ** renderer_ptr){
     SDL_Renderer *renderer = *renderer_ptr;
     const char *path = DK;
@@ -177,8 +189,7 @@ void add_static_textures(SDL_Renderer ** renderer_ptr){
  * @param renderer_ptr: SDL_Renderer **
  * @param bg_txtr_ptr: SDL_Texture **
  */
-void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
-
+struct stats * game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
     //Main loop flag
@@ -188,14 +199,14 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
     SDL_Event event;
 
     struct player *donkey_jr = NULL;
-    donkey_jr = create_player(renderer_ptr);
+    donkey_jr = create_player(renderer_ptr, lives, level, points);
 
     SDL_Rect *pos = NULL;
 
     struct node * first_croc = NULL;
     struct node * last_croc = NULL;
     struct red_croc *croc = NULL;
-    //struct blue_croc *croc = NULL;
+    struct blue_croc *croc2 = NULL;
     int cont_temp = 0;
 
     struct fruit * first_fruit = NULL;
@@ -251,16 +262,15 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
                     case SDLK_c:
                         croc = create_red_croc(renderer_ptr, cont_temp);
                         add_red_croc(&first_croc, &last_croc, &croc);
-                        //croc = create_blue_croc(renderer_ptr, cont_temp);
-                        //add_blue_croc(&first_croc, &last_croc, &croc);
-
                         temp_fruit = create_fruit(&first_fruit, &last_fruit, renderer_ptr, cont_temp, APPLE, 100);
                         add_fruit(&first_fruit, &last_fruit, &temp_fruit);
                         cont_temp++;
                         break;
 
                     case SDLK_e:
-                        delete_fruit(&first_fruit, cont_temp - 1);
+                        croc2 = create_blue_croc(renderer_ptr, cont_temp);
+                        add_blue_croc(&first_croc, &last_croc, &croc2);
+                        cont_temp++;
                         break;
 
                 }
@@ -299,7 +309,16 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
         SDL_Delay( DELAY );
     }
 
+
+    size_t size = sizeof (struct stats);
+    struct stats * next_stats = malloc(size);
+    next_stats->lives = donkey_jr->lives;
+    next_stats->level += 1;
+    next_stats->points = donkey_jr->points;
+
     free_player(&donkey_jr); //free resources
     free_croc_list(&first_croc);
     free_fruits_list(&first_fruit);
+
+    return next_stats;
 }

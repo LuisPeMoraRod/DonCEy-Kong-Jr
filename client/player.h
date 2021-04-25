@@ -35,6 +35,7 @@ struct player{
     int sprite;
     int points;
     int lives;
+    int level;
     bool right;
     bool liana;
     bool jump;
@@ -42,7 +43,7 @@ struct player{
     bool is_dead;
 };
 
-struct player * create_player(SDL_Renderer **renderer_ptr);
+struct player * create_player(SDL_Renderer **renderer_ptr, int lives, int level, int points);
 void free_player(struct player **donkey_jr_ptr);
 void move_left(struct player **donkey_jr_ptr);
 void move_right(struct player **donkey_jr_ptr);

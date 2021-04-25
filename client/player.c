@@ -7,7 +7,7 @@
  * Creates Donkey Kong Jr struct object
  * @return
  */
-struct player *create_player(SDL_Renderer **renderer_ptr){
+struct player *create_player(SDL_Renderer **renderer_ptr, int lives, int level, int points){
     size_t size = sizeof(struct player);
     struct player * donkey_jr = malloc(size); //new struct
 
@@ -85,8 +85,9 @@ struct player *create_player(SDL_Renderer **renderer_ptr){
     donkey_jr->liana = false;
     donkey_jr->is_dead = false;
 
-    donkey_jr->lives = LIVES;
-    donkey_jr->points = 0;
+    donkey_jr->lives = lives;
+    donkey_jr->points = points;
+    donkey_jr->level = level;
 
     return donkey_jr;
 }
@@ -484,6 +485,11 @@ void control_dk_movement(struct player **donkey_jr_ptr){
     else if (donkey_jr->fall) falling(&donkey_jr);
 }
 
+/**
+ * Loops through the crocs linked list and checks if there has been a collision with Donkey Kong Jr
+ * @param donkey_jr_ptr : struct player **
+ * @param first : struct node **
+ */
 void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
     struct player *donkey_jr = *donkey_jr_ptr;
     struct node * temp_node = *first;
@@ -524,6 +530,12 @@ void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
     }
 }
 
+
+/**
+ * Loops through the fruits linked list and checks if there has been a collision with Donkey Kong Jr
+ * @param donkey_jr_ptr : struct player **
+ * @param first : struct fruit **
+ */
 void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first){
     struct player * donkey_jr = *donkey_jr_ptr;
     struct fruit * temp_node = *first;
@@ -544,7 +556,16 @@ void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first){
 
 }
 
-
+/**
+ * Compares positions to check if there has been a collision
+ * @param x0
+ * @param y0
+ * @param x1
+ * @param y1
+ * @param width
+ * @param height
+ * @return bool
+ */
 bool is_collision(int x0, int y0, int x1, int y1, int width, int height){
     if((x0 < x1) && (x0 + DKJR_WIDTH/2 > x1) && (y0 == y1)) return true;
     else if ((x1 < x0) && (x1 + width > x0) && (y0 == y1)) return true;
@@ -561,6 +582,7 @@ bool is_collision(int x0, int y0, int x1, int y1, int width, int height){
 bool death(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     if(donkey_jr->pos.y >= WIN_HEIGHT){
+        donkey_jr->lives -= 1;
         return true;
     }
     return false;

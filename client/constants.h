@@ -30,6 +30,25 @@
 #define DK_STAND_L "resources/donkey_jr/stand_left.png"
 #define DK_DEATH "resources/donkey_jr/death0.png"
 
+#define MENU_BG "resources/menu.png"
+#define PLAYER0_PATH "resources/player1.png"
+#define PLAYER1_PATH "resources/player2.png"
+#define OBS0_PATH "resources/observer1.png"
+#define OBS1_PATH "resources/observer2.png"
+#define BTN_WIDTH 336
+#define BTN_HEIGHT 28
+#define BTN0_X 115
+#define BTN0_Y 390
+#define BTN1_Y 440
+#define BTN2_Y 487
+#define BTN3_Y 533
+
+#define STAR_PATH "resources/star.png"
+#define STAR_WIDTH 24
+#define STAR_X 465
+#define STAR_Y0 487
+#define STAR_Y1 533
+
 //crocodiles
 #define C_RED_UP0 "resources/enemies/red_croc_up0.png"
 #define C_RED_UP1 "resources/enemies/red_croc_up1.png"
