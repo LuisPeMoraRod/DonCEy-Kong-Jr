@@ -39,6 +39,30 @@
 #define C_BLUE_DOWN0 "resources/enemies/blue_croc_down0.png"
 #define C_BLUE_DOWN1 "resources/enemies/blue_croc_down1.png"
 
+//statics
+#define DK "resources/jail.png"
+#define DK_X 10
+#define DK_Y 116
+#define DK_WIDTH 96
+#define DK_HEIGHT 64
+
+#define MARIO "resources/mario.png"
+#define M_X 115
+#define M_Y 148
+#define M_WIDTH 58
+#define M_HEIGHT 32
+
+#define KEY "resources/key.png"
+#define KEY_X 170
+#define KEY_Y 60
+#define KEY_WIDTH 34
+#define KEY_HEIGHT 36
+
+//fruits
+#define APPLE "resources/apple.png"
+#define BANANA "resources/banana.png"
+#define MANGO "resources/mango.png"
+
 //initial positons
 #define DK_X0 2
 #define DK_Y0 572

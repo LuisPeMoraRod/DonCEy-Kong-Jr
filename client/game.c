@@ -20,23 +20,6 @@ void start_game(){
     SDL_Texture* background_texture = NULL;
 
     window = init_wdw();
-/*
-    //Start is_up SDL and create window
-    if( !init_window(&window, &renderer) )
-    {
-        printf( "Failed to initialize!\n" );
-    }
-    else
-    {
-        //Load background image
-        const char *background_path = BG_PATH;
-        background_texture = load_texture(&renderer, background_path);
-        if (background_texture != NULL) {
-            game_loop(&renderer, &background_texture);
-        } else {
-            printf("Failed to load media!\n");
-        }
-    }*/
 
     if(window == NULL )
     {
@@ -59,64 +42,9 @@ void start_game(){
 }
 
 /**
- * Attempts to create a SDL window
- * @return bool
+ * Creates windor
+ * @return SDL_Window *
  */
-bool init_window(SDL_Window **window_ptr, SDL_Renderer **renderer_ptr){
-
-    SDL_Window *window = *window_ptr;
-    SDL_Renderer *renderer = *renderer_ptr;
-
-    //Initialization flag
-    bool success = true;
-
-    //Initialize SDL
-    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
-    {
-        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
-        success = false;
-    }
-    else
-    {
-        //Set background_texture filtering to linear
-        if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
-        {
-            printf( "Warning: Linear background_texture filtering not enabled!" );
-        }
-        //Create window
-        window = SDL_CreateWindow("DonCEy Kong Jr", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN );
-        if(window == NULL )
-        {
-            printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
-            success = false;
-        }
-        else
-        {
-            //Create renderer for window
-            renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
-            if( renderer == NULL )
-            {
-                printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
-                success = false;
-            }
-            else
-            {
-                //Initialize renderer color
-                SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
-
-                //Initialize PNG loading
-                int imgFlags = IMG_INIT_PNG;
-                if( !( IMG_Init( imgFlags ) & imgFlags ) )
-                {
-                    printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
-                    success = false;
-                }
-            }
-        }
-    }
-    return success;
-}
-
 SDL_Window * init_wdw(){
     SDL_Window *window = NULL;
 
@@ -138,6 +66,11 @@ SDL_Window * init_wdw(){
     return window;
 }
 
+/**
+ * Creates graphic renderer
+ * @param window_ptr: SDL_Window **
+ * @return SDL_Renderer *
+ */
 SDL_Renderer *init_renderer(SDL_Window ** window_ptr){
     SDL_Window *window = *window_ptr;
     SDL_Renderer *renderer = NULL;
@@ -218,6 +151,32 @@ SDL_Texture *load_texture(SDL_Renderer **renderer_ptr, const char path[MAX_PATH]
 
     return newTexture;
 }
+
+void add_static_textures(SDL_Renderer ** renderer_ptr){
+    SDL_Renderer *renderer = *renderer_ptr;
+    const char *path = DK;
+
+    SDL_Texture *texture = load_texture(&renderer, path); //Add Donkey Kong in jail image
+    SDL_Rect pos_dk = {DK_X, DK_Y, DK_WIDTH, DK_HEIGHT};
+    SDL_RenderCopy(renderer, texture, NULL, &pos_dk);
+
+    path = MARIO;
+    texture = load_texture(&renderer, path);
+    SDL_Rect pos_m = {M_X, M_Y, M_WIDTH, M_HEIGHT};
+    SDL_RenderCopy(renderer, texture, NULL, &pos_m);
+
+    path = KEY;
+    texture = load_texture(&renderer, path);
+    SDL_Rect pos_k = {KEY_X, KEY_Y, KEY_WIDTH, KEY_HEIGHT};
+    SDL_RenderCopy(renderer, texture, NULL, &pos_k);
+
+}
+
+/**
+ * Main game loop of the client program
+ * @param renderer_ptr: SDL_Renderer **
+ * @param bg_txtr_ptr: SDL_Texture **
+ */
 void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
 
     SDL_Renderer *renderer = *renderer_ptr;
@@ -300,10 +259,12 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
         control_dk_movement(&donkey_jr);
 
         //Clear screen
-        SDL_RenderClear( renderer );
+        SDL_RenderClear(renderer);
 
         //Render background_texture to screen
         SDL_RenderCopy(renderer, background_texture, NULL, NULL );
+
+        add_static_textures(&renderer);
 
         pos = &donkey_jr->pos;
         SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
@@ -323,5 +284,3 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
     free_player(&donkey_jr); //free resources
     free_croc_list(&first_croc);
 }
-
-

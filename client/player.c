@@ -509,4 +509,3 @@ void free_player(struct player **donkey_jr_ptr){
     SDL_DestroyTexture(donkey_jr->liana_left1);
     free(donkey_jr);
 }
-
