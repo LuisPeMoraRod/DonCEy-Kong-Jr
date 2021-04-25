@@ -1,260 +1,137 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="582.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="582.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ServerGUI.ServerGUIController">
    <children>
       <ImageView fitHeight="403.0" fitWidth="583.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@images/background.png" />
          </image>
       </ImageView>
-      <Pane fx:id="itemSelectionPane" layoutY="83.0" prefHeight="200.0" prefWidth="206.0">
+      <VBox fx:id="cocoVb" alignment="TOP_CENTER" layoutX="641.0" layoutY="576.0" prefHeight="331.0" prefWidth="213.0" spacing="20.0">
+         <opaqueInsets>
+            <Insets top="10.0" />
+         </opaqueInsets>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
          <children>
-            <Text fill="WHITE" layoutX="8.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1. Select the action you want to do">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the type of crocodile you want to add" wrappingWidth="184.9453125">
                <font>
-                  <Font size="10.0" />
+                  <Font size="12.0" />
                </font>
             </Text>
-            <Button fx:id="redCocoBtn" layoutX="56.0" layoutY="45.0" mnemonicParsing="false" text="Add Red Crocodile">
+            <ChoiceBox fx:id="colorSelection" prefHeight="27.0" prefWidth="82.0" />
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the number of the liana wher you want to add the crocodile" wrappingWidth="184.9453125">
                <font>
-                  <Font size="10.0" />
+                  <Font size="12.0" />
                </font>
-            </Button>
-            <Button fx:id="redCocoBtn1" layoutX="54.0" layoutY="89.0" mnemonicParsing="false" text="Add Blue Crocodile">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button fx:id="redCocoBtn11" layoutX="53.0" layoutY="141.0" mnemonicParsing="false" text="Add or remove Fruit">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
+            </Text>
+            <ChoiceBox fx:id="lianaSelection" prefHeight="27.0" prefWidth="82.0" />
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+                  <Button fx:id="goBackCocoBtn" mnemonicParsing="false" onAction="#goBack" text="Go back">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="addCocoBtn" mnemonicParsing="false" onAction="#addCoco" text="Add crocodile">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets left="15.0" top="20.0" />
+               </VBox.margin>
+            </HBox>
          </children>
-      </Pane>
-      <Pane fx:id="cocoPositionPane" layoutX="393.0" layoutY="-209.0" prefHeight="200.0" prefWidth="200.0">
+      </VBox>
+      <VBox fx:id="fruitVb" alignment="TOP_CENTER" layoutX="301.0" layoutY="559.0" prefHeight="331.0" prefWidth="213.0" spacing="20.0">
+         <opaqueInsets>
+            <Insets top="10.0" />
+         </opaqueInsets>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
          <children>
-            <Text fill="WHITE" layoutX="11.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2. Choose the number of the vine where you want to put your crocodile" wrappingWidth="191.57748413085938">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the number of the platform you want to put a banana" wrappingWidth="184.9453125">
                <font>
-                  <Font size="10.0" />
+                  <Font size="12.0" />
                </font>
             </Text>
-            <Button layoutX="18.0" layoutY="57.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="1">
+            <ChoiceBox fx:id="platformSelectionAdd" prefHeight="27.0" prefWidth="82.0" />
+            <Button fx:id="addBananaBtn" mnemonicParsing="false" onAction="#addBanana" text="Add banana">
                <font>
-                  <Font size="10.0" />
+                  <Font size="11.0" />
                </font>
             </Button>
-            <Button layoutX="52.0" layoutY="57.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="2">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose the number of the platform you want to delete a banana" wrappingWidth="184.9453125">
                <font>
-                  <Font size="10.0" />
+                  <Font size="12.0" />
+               </font>
+            </Text>
+            <ChoiceBox fx:id="platformSelectionRemove" prefHeight="27.0" prefWidth="82.0" />
+            <Button fx:id="removeBananaBtn" mnemonicParsing="false" onAction="#removeBanana" text="Remove banana">
+               <font>
+                  <Font size="11.0" />
                </font>
             </Button>
-            <Button layoutX="86.0" layoutY="57.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="3">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="121.0" layoutY="58.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="4">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="157.0" layoutY="57.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="5">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="18.0" layoutY="91.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="6">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="52.0" layoutY="91.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="7">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="86.0" layoutY="91.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="8">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="121.0" layoutY="92.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="9">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="157.0" layoutY="91.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="10">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="87.0" layoutY="125.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="11">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="9.0" layoutY="168.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="56.0" text="Go back">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="134.0" layoutY="167.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="56.0" text="Send">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="goBackFruitBtn" mnemonicParsing="false" onAction="#goBack" text="Go back">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+               </children>
+               <VBox.margin>
+                  <Insets left="15.0" top="15.0" />
+               </VBox.margin>
+            </HBox>
          </children>
-      </Pane>
-      <Pane fx:id="cocoPositionPane1" layoutX="3.0" layoutY="-360.0" prefHeight="339.0" prefWidth="200.0">
+      </VBox>
+      <VBox fx:id="mainVb" layoutX="-1.0" layoutY="72.0" prefHeight="325.0" prefWidth="213.0">
          <children>
-            <Text fill="WHITE" layoutX="11.0" layoutY="12.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2. Choose the number of the platform where you want to put the banana" wrappingWidth="191.57748413085938">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Text>
-            <Button layoutX="19.0" layoutY="38.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="1">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="53.0" layoutY="38.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="2">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="87.0" layoutY="38.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="3">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="122.0" layoutY="39.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="4">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="158.0" layoutY="38.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="5">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="19.0" layoutY="72.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="6">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="53.0" layoutY="72.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="7">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="87.0" layoutY="72.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="8">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="122.0" layoutY="73.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="9">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="158.0" layoutY="72.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="10">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="71.0" layoutY="305.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="56.0" text="Go back">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="132.0" layoutY="149.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="56.0" text="Add">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Text fill="WHITE" layoutX="9.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3.  Select the amount of points you want to give to this bananas" wrappingWidth="191.57748413085938">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Text>
-            <Button layoutX="22.0" layoutY="149.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="5">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="56.0" layoutY="149.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="10">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="92.0" layoutY="149.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="15">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Text fill="WHITE" layoutX="9.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select the number of the banana you want to remove" wrappingWidth="191.57748413085938">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Text>
-            <Button layoutX="20.0" layoutY="220.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="1">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="54.0" layoutY="220.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="2">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="88.0" layoutY="220.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="3">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="123.0" layoutY="221.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="4">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="159.0" layoutY="220.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="5">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="20.0" layoutY="254.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="6">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="54.0" layoutY="254.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="7">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="88.0" layoutY="254.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="8">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="123.0" layoutY="255.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="9">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
-            <Button layoutX="159.0" layoutY="254.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="25.0" text="10">
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Button>
+            <VBox fx:id="optionsVb" alignment="TOP_CENTER" prefHeight="331.0" prefWidth="213.0" spacing="20.0">
+               <opaqueInsets>
+                  <Insets top="10.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chose the action you want to do" wrappingWidth="184.9453125">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Text>
+                  <Button fx:id="addCocoBtn" mnemonicParsing="false" onAction="#goToCocoMenu" text="Add crocodile">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="fruitBtn" mnemonicParsing="false" onAction="#goToFruitMenu" text="Add or remove fruit">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
          </children>
-      </Pane>
+      </VBox>
    </children>
 </Pane>
