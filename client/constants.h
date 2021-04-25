@@ -28,6 +28,7 @@
 #define DK_LIANA_L1 "resources/donkey_jr/liana_left1.png"
 #define DK_STAND_R "resources/donkey_jr/stand_right.png"
 #define DK_STAND_L "resources/donkey_jr/stand_left.png"
+#define DK_DEATH "resources/donkey_jr/death0.png"
 
 //crocodiles
 #define C_RED_UP0 "resources/enemies/red_croc_up0.png"
@@ -91,7 +92,8 @@ enum donkey_jr_sprite{
     STAND_R0,
     STAND_R1,
     STAND_L0,
-    STAND_L1
+    STAND_L1,
+    DEATH
 };
 
 enum crocs_sprite{
@@ -112,6 +114,7 @@ enum crocs_sprite{
 #define CROC_HEIGHT 48
 #define CROC_ADJ 30 //adjust in x for croc positioning in lianas
 
+#define LIVES 3
 #define DELAY 10
 #define DELAY_CROCS 10
 

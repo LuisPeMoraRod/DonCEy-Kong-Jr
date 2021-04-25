@@ -63,13 +63,26 @@ void add_fruit(struct fruit **first, struct fruit **last, struct fruit ** new_fr
 
 void render_fruits(SDL_Renderer ** renderer_ptr, struct fruit **first){
     struct fruit *temp_ptr = *first;
-    SDL_Rect * pos = NULL;
-    while( temp_ptr != NULL){
-        pos = &temp_ptr->pos;
-        SDL_RenderCopy(*renderer_ptr, temp_ptr->texture, NULL, pos);
-        temp_ptr = temp_ptr->next_node;
+        SDL_Rect * pos = NULL;
+        while( temp_ptr != NULL){
+            if(temp_ptr->visible){
+                pos = &temp_ptr->pos;
+                SDL_RenderCopy(*renderer_ptr, temp_ptr->texture, NULL, pos);
+            }
+            temp_ptr = temp_ptr->next_node;
+        }
+}
+
+void delete_fruit(struct fruit ** first, int platform){
+    struct fruit * temp_fruit = *first;
+    while(temp_fruit != NULL){
+        if(temp_fruit->platform == platform){
+            temp_fruit->visible = false;
+        }
+        temp_fruit = temp_fruit->next_node;
     }
 }
+
 
 void free_fruits_list(struct fruit ** first){
     struct fruit *temp_ptr = *first;

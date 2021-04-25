@@ -20,4 +20,5 @@ void set_fruit_pos(int x, int y, struct fruit ** fruit_ptr);
 void add_fruit(struct fruit **first, struct fruit **last, struct fruit ** new_fruit);
 void render_fruits(SDL_Renderer ** renderer_ptr, struct fruit **first);
 void free_fruits_list(struct fruit ** first);
+void delete_fruit(struct fruit ** first, int platform);
 #endif //CLIENT_FRUITS_H

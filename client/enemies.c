@@ -301,7 +301,7 @@ void render_crocs(SDL_Renderer ** renderer_ptr, struct node **first){
         }
         if(temp_ptr->blue_croc_ptr != NULL){
             blue = temp_ptr->blue_croc_ptr;
-            pos = &temp_ptr->blue_croc_ptr->pos;
+            pos = &blue->pos;
             SDL_RenderCopy(*renderer_ptr, blue->current_texture, NULL, pos);
         }
         temp_ptr = temp_ptr->next_node;

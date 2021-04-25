@@ -194,8 +194,8 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
 
     struct node * first_croc = NULL;
     struct node * last_croc = NULL;
-    //struct red_croc *croc = NULL;
-    struct blue_croc *croc = NULL;
+    struct red_croc *croc = NULL;
+    //struct blue_croc *croc = NULL;
     int cont_temp = 0;
 
     struct fruit * first_fruit = NULL;
@@ -213,7 +213,7 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
             if(event.type == SDL_QUIT )
             {
                 quit = true;
-            } else if (event.type == SDL_KEYDOWN){
+            } else if (event.type == SDL_KEYDOWN && !donkey_jr->is_dead){
                 switch (event.key.keysym.sym) {
 
                     case SDLK_d: //move to the right
@@ -249,20 +249,24 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
                         break;
 
                     case SDLK_c:
-                        //croc = create_red_croc(cont_temp);
-                        //add_red_croc(&first_croc, &last_croc, &croc);
-                        croc = create_blue_croc(renderer_ptr, cont_temp);
-                        add_blue_croc(&first_croc, &last_croc, &croc);
+                        croc = create_red_croc(renderer_ptr, cont_temp);
+                        add_red_croc(&first_croc, &last_croc, &croc);
+                        //croc = create_blue_croc(renderer_ptr, cont_temp);
+                        //add_blue_croc(&first_croc, &last_croc, &croc);
 
                         temp_fruit = create_fruit(&first_fruit, &last_fruit, renderer_ptr, cont_temp, APPLE, 100);
                         add_fruit(&first_fruit, &last_fruit, &temp_fruit);
                         cont_temp++;
+                        break;
 
-                        break;;
+                    case SDLK_e:
+                        delete_fruit(&first_fruit, cont_temp - 1);
+                        break;
 
                 }
             }
         }
+
         //controls jump and falling movements
         control_dk_movement(&donkey_jr);
 
@@ -274,16 +278,17 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
 
         add_static_textures(&renderer);
 
-        pos = &donkey_jr->pos;
-        SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
-
         //paint all crocs
         if(first_croc != NULL){
+            enemy_collision(&donkey_jr, &first_croc);//checks for collisions with enemies
             control_crocs_mov(&first_croc);
             render_crocs(&renderer, &first_croc);
         }
 
         if (first_fruit != NULL) render_fruits(&renderer, &first_fruit);
+
+        pos = &donkey_jr->pos;
+        SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
 
         //Update screen
         SDL_RenderPresent( renderer );

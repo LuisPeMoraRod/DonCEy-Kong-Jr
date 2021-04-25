@@ -67,6 +67,10 @@ struct player *create_player(SDL_Renderer **renderer_ptr){
     donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->stand_left = donkey_jr_txtr;
 
+    donkey_jr_path = DK_DEATH;
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
+    donkey_jr->death = donkey_jr_txtr;
+
     int x = DK_X0; int y = DK_Y0; //initial position
     SDL_Rect pos_rect = {x, y, DKJR_WIDTH, DKJR_HEIGHT};
     donkey_jr->pos = pos_rect;
@@ -79,8 +83,9 @@ struct player *create_player(SDL_Renderer **renderer_ptr){
     donkey_jr->right = true;
     donkey_jr->fall = false;
     donkey_jr->liana = false;
+    donkey_jr->is_dead = false;
 
-    donkey_jr->lives = 3;
+    donkey_jr->lives = LIVES;
     donkey_jr->points = 0;
 
     return donkey_jr;
@@ -290,7 +295,7 @@ void jumping(struct player **donkey_jr_ptr){
 void falling(struct player **donkey_jr_ptr){
     struct player * donkey_jr = *donkey_jr_ptr;
     int x = donkey_jr->pos.x;
-    if(reached_liana(&donkey_jr)){
+    if(reached_liana(&donkey_jr) && !donkey_jr->is_dead){
         if (!donkey_jr->right || (x >= L0_X && x <= (L0_X + WIDTH_LIANA))){
             if (!(x >= L0_X && x <= (L0_X + WIDTH_LIANA))){
                 donkey_jr->pos.x += WIDTH_LIANA;
@@ -306,7 +311,7 @@ void falling(struct player **donkey_jr_ptr){
         donkey_jr->y_jump = donkey_jr->pos.y;
         donkey_jr->fall = false; //stop falling
         donkey_jr->liana = true;
-    }else if (on_platform(&donkey_jr)){
+    }else if (on_platform(&donkey_jr) && !donkey_jr->is_dead){
         if(donkey_jr->right){
             donkey_jr->sprite = STAND_R0;
             donkey_jr->current_texture = donkey_jr->stand_right;
@@ -477,6 +482,45 @@ void control_dk_movement(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     if(donkey_jr->jump) jumping(&donkey_jr);
     else if (donkey_jr->fall) falling(&donkey_jr);
+}
+
+void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
+    struct player *donkey_jr = *donkey_jr_ptr;
+    struct node * temp_node = *first;
+    struct red_croc * red = NULL;
+    struct blue_croc * blue = NULL;
+    SDL_Rect * pos = NULL;
+    int x_dkr = donkey_jr->pos.x;
+    int y_dkjr = donkey_jr->pos.y;
+
+    while(temp_node != NULL){
+        if(temp_node->red_croc_ptr != NULL){
+            red = temp_node->red_croc_ptr;
+            pos = &red->pos;
+
+        }
+        if(temp_node->blue_croc_ptr != NULL){
+            blue = temp_node->blue_croc_ptr;
+            pos = &blue->pos;
+        }
+
+        if(is_collision(x_dkr, y_dkjr, pos->x - CROC_ADJ, pos->y, CROC_WIDTH, CROC_HEIGHT)){
+            donkey_jr->is_dead = true;
+            donkey_jr->fall = true;
+            donkey_jr->lives -= 1;
+            donkey_jr->sprite = DEATH;
+            donkey_jr->current_texture = donkey_jr->death;
+        }
+        temp_node = temp_node->next_node;
+    }
+}
+
+bool is_collision(int x0, int y0, int x1, int y1, int width, int height){
+    if((x0 < x1) && (x0 + DKJR_WIDTH > x1) && (y0 == y1)) return true;
+    else if ((x1 < x0) && (x1 + width > x0) && (y0 == y1)) return true;
+    else if ((y0 < y1) && (y0 + DKJR_WIDTH > y1) && (x0 == x1)) return true;
+    else if ((y1 < y0) && (y1 + height > y0) && (x0 == x1)) return true;
+    return false;
 }
 
 /**

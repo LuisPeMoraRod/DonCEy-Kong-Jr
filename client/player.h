@@ -9,6 +9,8 @@
 #include <stdbool.h>
 #include "constants.h"
 #include "game.h"
+#include "fruits.h"
+#include "enemies.h"
 
 struct player{
     SDL_Rect pos;
@@ -26,6 +28,7 @@ struct player{
     SDL_Texture *liana_left1;
     SDL_Texture *stand_right;
     SDL_Texture *stand_left;
+    SDL_Texture *death;
 
     int y_jump;
 
@@ -36,6 +39,7 @@ struct player{
     bool liana;
     bool jump;
     bool fall;
+    bool is_dead;
 };
 
 struct player * create_player(SDL_Renderer **renderer_ptr);
@@ -55,5 +59,8 @@ void l_side_liana(struct player ** donkey_jr_ptr);
 bool death(struct player **donkey_jr_ptr);
 bool top_liana(int x, int y);
 bool fall_liana(int x, int y);
+void enemy_collision(struct player **donkey_jr_ptr, struct node **first);
+void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first);
+bool is_collision(int x0, int y0, int x1, int y1, int width, int height);
 
 #endif //CLIENT_PLAYER_H
