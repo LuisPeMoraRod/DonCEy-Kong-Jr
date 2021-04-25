@@ -166,7 +166,7 @@ void move_left(struct player **donkey_jr_ptr){
  */
 void move_up(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
-    if (!top_liana(donkey_jr_ptr)){
+    if (!top_liana(donkey_jr->pos.x, donkey_jr->pos.y)){
         donkey_jr->pos.y-=MOV;
         if(donkey_jr->sprite == LIANA_L0){
             donkey_jr->sprite = LIANA_L1;
@@ -191,7 +191,7 @@ void move_up(struct player **donkey_jr_ptr){
 void move_down(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     donkey_jr->pos.y+=MOV;
-    if (fall_liana(donkey_jr_ptr)){
+    if (fall_liana(donkey_jr->pos.x, donkey_jr->pos.y)){
         donkey_jr->fall = true;
         donkey_jr->liana = false;
         if(donkey_jr->right){
@@ -406,10 +406,8 @@ bool on_platform(struct player **donkey_jr_ptr){
   * @param donkey_jr_ptr: struct player **
   * @return bool
   */
- bool top_liana(struct player **donkey_jr_ptr){
-     struct player *donkey_jr = *donkey_jr_ptr;
-     int x = donkey_jr->pos.x;
-     int y = donkey_jr->pos.y - MOV;
+ bool top_liana(int x, int y){
+     y = y - MOV;
      if (y < L0_Y0 && y && x >= L0_X && x<= (L0_X + WIDTH_LIANA)){
          return true;
      }else if (y < L1_Y0 && y && x >= L1_X && x<= (L1_X + WIDTH_LIANA)){
@@ -441,10 +439,7 @@ bool on_platform(struct player **donkey_jr_ptr){
  * @param donkey_jr_ptr: struct player **
  * @return bool
  */
- bool fall_liana(struct player **donkey_jr_ptr){
-     struct player *donkey_jr = *donkey_jr_ptr;
-     int x = donkey_jr->pos.x;
-     int y = donkey_jr->pos.y;
+ bool fall_liana(int x, int y){
      if (y > L0_Y1 && y && x >= L0_X && x<= (L0_X + WIDTH_LIANA)){
          return true;
      }else if (y > L1_Y1 && y && x >= L1_X && x<= (L1_X + WIDTH_LIANA)){

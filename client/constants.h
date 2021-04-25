@@ -46,6 +46,7 @@
 //movement distances
 #define JUMP 1
 #define MOV 8
+#define MOV_CROCS 1
 #define JUMP_DIFF 60
 
 //enum for sprites

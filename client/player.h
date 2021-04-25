@@ -52,7 +52,7 @@ bool reached_liana(struct player **donkey_jr_ptr);
 void r_side_liana(struct player ** donkey_jr_ptr);
 void l_side_liana(struct player ** donkey_jr_ptr);
 bool death(struct player **donkey_jr_ptr);
-bool top_liana(struct player **donkey_jr_ptr);
-bool fall_liana(struct player **donkey_jr_ptr);
+bool top_liana(int x, int y);
+bool fall_liana(int x, int y);
 
 #endif //CLIENT_PLAYER_H

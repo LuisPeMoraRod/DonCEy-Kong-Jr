@@ -147,8 +147,8 @@ struct blue_croc* create_blue_croc(int liana){
  * @param red_croc_ptr: struct red_croc **
  * @return struct red_croc*
  */
-struct blue_croc* set_position_blue(int x, int y, struct red_croc ** blue_croc_ptr){
-    struct red_croc* croc = *blue_croc_ptr;
+struct blue_croc* set_position_blue(int x, int y, struct blue_croc ** blue_croc_ptr){
+    struct blue_croc* croc = *blue_croc_ptr;
     if (x == L0_X){
         SDL_Rect pos_rect = {x, y, CROC_WIDTH, CROC_HEIGHT};
         croc->pos = pos_rect;
@@ -207,6 +207,59 @@ void add_blue_croc(struct node ** first, struct node** last, struct blue_croc **
     }
 }
 
+void control_crocs_mov(struct node ** first_ptr){
+    struct node * first = *first_ptr;
+    struct node * temp_ptr = first;
+    while(temp_ptr != NULL){
+        if(temp_ptr->red_croc_ptr != NULL){
+            movement_red_croc(&temp_ptr->red_croc_ptr);
+        }
+        /*
+        if(temp_ptr->blue_croc_ptr != NULL){
+            movement_blue_croc(&temp_ptr->blue_croc_ptr);
+        }*/
+        temp_ptr = temp_ptr->next_node;
+    }
+}
+
+void movement_red_croc(struct red_croc ** red_croc_ptr){
+    struct red_croc * croc = *red_croc_ptr;
+    if(top_liana(croc->pos.x - CROC_ADJ, croc->pos.y) || top_liana(croc->pos.x, croc->pos.y)){
+        croc->is_up = false;
+        croc->sprite = RED_DOWN0;
+        croc->current_texture = croc->down0;
+    }
+    if (fall_liana(croc->pos.x - CROC_ADJ, croc->pos.y) || fall_liana(croc->pos.x, croc->pos.y)) {
+        croc->is_up = true;
+        croc->sprite = RED_UP0;
+        croc->current_texture = croc->up0;
+    }
+    if(!croc->is_up){
+        croc->pos.y += MOV_CROCS;
+        if(croc->sprite == RED_DOWN0 && (croc->pos.y%10 == 0)){
+            croc->sprite = RED_DOWN1;
+            croc->current_texture = croc->down1;
+        }else if (croc->sprite == RED_DOWN1 && (croc->pos.y%10 == 0)){
+            croc->sprite = RED_DOWN0;
+            croc->current_texture = croc->down0;
+        }
+    }else{
+        croc->pos.y -= MOV_CROCS;
+        if(croc->sprite == RED_UP0 && (croc->pos.y%10 == 0)){
+            croc->sprite = RED_UP1;
+            croc->current_texture = croc->up1;
+        }else if (croc->sprite == RED_UP1 && (croc->pos.y%10 == 0)){
+            croc->sprite = RED_UP0;
+            croc->current_texture = croc->up0;
+        }
+    }
+}
+
+/**
+ * Renders crocs textures by looping in the linked list
+ * @param renderer_ptr: SDL_Rendere **
+ * @param first: struct node **
+ */
 void render_crocs(SDL_Renderer ** renderer_ptr, struct node **first){
     struct node *temp_ptr = *first;
 
