@@ -7,7 +7,7 @@
  * Creates Donkey Kong Jr struct object
  * @return
  */
-struct player *create_player(){
+struct player *create_player(SDL_Renderer **renderer_ptr){
     size_t size = sizeof(struct player);
     struct player * donkey_jr = malloc(size); //new struct
 
@@ -16,55 +16,55 @@ struct player *create_player(){
 
     //set all textures (one for every sprite)
     donkey_jr_path = DK_RUN_R0;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->run_right0 = donkey_jr_txtr;
 
     donkey_jr_path = DK_RUN_R1;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->run_right1 = donkey_jr_txtr;
 
     donkey_jr_path = DK_RUN_L0;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->run_left0 = donkey_jr_txtr;
 
     donkey_jr_path = DK_RUN_L1;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->run_left1 = donkey_jr_txtr;
 
     donkey_jr_path = DK_RUN_L1;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->run_left1 = donkey_jr_txtr;
 
     donkey_jr_path = DK_JUMP_R;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->jump_right = donkey_jr_txtr;
 
     donkey_jr_path = DK_JUMP_L;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->jump_left = donkey_jr_txtr;
 
     donkey_jr_path = DK_LIANA_R0;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->liana_right0 = donkey_jr_txtr;
 
     donkey_jr_path = DK_LIANA_R1;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->liana_right1 = donkey_jr_txtr;
 
     donkey_jr_path = DK_LIANA_L0;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->liana_left0 = donkey_jr_txtr;
 
     donkey_jr_path = DK_LIANA_L1;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->liana_left1 = donkey_jr_txtr;
 
     donkey_jr_path = DK_STAND_R;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->stand_right = donkey_jr_txtr;
 
     donkey_jr_path = DK_STAND_L;
-    donkey_jr_txtr = load_texture(donkey_jr_path);
+    donkey_jr_txtr = load_texture(renderer_ptr, donkey_jr_path);
     donkey_jr->stand_left = donkey_jr_txtr;
 
     int x = DK_X0; int y = DK_Y0; //initial position
@@ -488,7 +488,6 @@ bool death(struct player **donkey_jr_ptr){
     }
     return false;
 }
-
 
 /**
  * Free resources of player struct (including graphics)

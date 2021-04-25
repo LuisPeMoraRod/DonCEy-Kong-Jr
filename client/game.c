@@ -5,22 +5,24 @@
 
 #include "game.h"
 
-//The window to be rendering
-SDL_Window* window = NULL;
-
-//The window renderer
-SDL_Renderer* renderer = NULL;
-
-//Current displayed background_texture
-SDL_Texture* background_texture = NULL;
-
-
 /**
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
 void start_game(){
+
+    //The window to be rendering
+    SDL_Window* window = NULL;
+
+    //The window renderer
+    SDL_Renderer* renderer = NULL;
+
+    //Current displayed background_texture
+    SDL_Texture* background_texture = NULL;
+
+    window = init_wdw();
+/*
     //Start is_up SDL and create window
-    if( !init_window() )
+    if( !init_window(&window, &renderer) )
     {
         printf( "Failed to initialize!\n" );
     }
@@ -28,23 +30,43 @@ void start_game(){
     {
         //Load background image
         const char *background_path = BG_PATH;
-        background_texture = load_texture(background_path);
+        background_texture = load_texture(&renderer, background_path);
         if (background_texture != NULL) {
-            game_loop();
+            game_loop(&renderer, &background_texture);
         } else {
             printf("Failed to load media!\n");
+        }
+    }*/
+
+    if(window == NULL )
+    {
+        printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+    }else{
+        renderer = init_renderer(&window);
+        if(renderer != NULL){
+            const char *background_path = BG_PATH;
+            background_texture = load_texture(&renderer, background_path);
+            if (background_texture != NULL) {
+                game_loop(&renderer, &background_texture);
+            } else {
+                printf("Failed to load media!\n");
+            }
         }
     }
 
     //Free resources and close SDL
-    close_window();
+    close_window(&window, &renderer, &background_texture);
 }
 
 /**
  * Attempts to create a SDL window
  * @return bool
  */
-bool init_window(){
+bool init_window(SDL_Window **window_ptr, SDL_Renderer **renderer_ptr){
+
+    SDL_Window *window = *window_ptr;
+    SDL_Renderer *renderer = *renderer_ptr;
+
     //Initialization flag
     bool success = true;
 
@@ -95,12 +117,60 @@ bool init_window(){
     return success;
 }
 
+SDL_Window * init_wdw(){
+    SDL_Window *window = NULL;
+
+    //Initialize SDL
+    if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+    {
+        printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+    }
+    else
+    {
+        //Set background_texture filtering to linear
+        if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+        {
+            printf( "Warning: Linear background_texture filtering not enabled!" );
+        }
+        //Create window
+        window = SDL_CreateWindow("DonCEy Kong Jr", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIN_WIDTH, WIN_HEIGHT, SDL_WINDOW_SHOWN );
+    }
+    return window;
+}
+
+SDL_Renderer *init_renderer(SDL_Window ** window_ptr){
+    SDL_Window *window = *window_ptr;
+    SDL_Renderer *renderer = NULL;
+
+    //Create renderer for window
+    renderer = SDL_CreateRenderer( window, -1, SDL_RENDERER_ACCELERATED );
+    if( renderer == NULL )
+    {
+        printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+    }
+    else
+    {
+        //Initialize renderer color
+        SDL_SetRenderDrawColor( renderer, 0xFF, 0xFF, 0xFF, 0xFF );
+
+        //Initialize PNG loading
+        int imgFlags = IMG_INIT_PNG;
+        if( !( IMG_Init( imgFlags ) & imgFlags ) )
+        {
+            printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+        }
+    }
+    return renderer;
+}
 
 /**
  * Free SDL graphic resources
  */
-void close_window()
+void close_window(SDL_Window **window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr)
 {
+    SDL_Window *window = *window_ptr;
+    SDL_Renderer *renderer = *renderer_ptr;
+    SDL_Texture *background_texture = *bg_txtr_ptr;
     //Free loaded image
     SDL_DestroyTexture(background_texture);
     background_texture = NULL;
@@ -116,7 +186,14 @@ void close_window()
     SDL_Quit();
 }
 
-SDL_Texture *load_texture(const char path[MAX_PATH]){
+/**
+ * Loads png image to be rendered
+ * @param renderer_ptr: SDL_Renderer **
+ * @param path : char
+ * @return SDL_Texture *
+ */
+SDL_Texture *load_texture(SDL_Renderer **renderer_ptr, const char path[MAX_PATH]){
+    SDL_Renderer *renderer = *renderer_ptr;
     //The final texture
     SDL_Texture* newTexture = NULL;
 
@@ -132,7 +209,7 @@ SDL_Texture *load_texture(const char path[MAX_PATH]){
         newTexture = SDL_CreateTextureFromSurface( renderer, loadedSurface );
         if( newTexture == NULL )
         {
-            printf( "Unable to createtexture from %s! SDL Error: %s\n", path, SDL_GetError() );
+            printf( "Unable to create texture from %s! SDL Error: %s\n", path, SDL_GetError() );
         }
 
         //Get rid of old loaded surface
@@ -141,7 +218,10 @@ SDL_Texture *load_texture(const char path[MAX_PATH]){
 
     return newTexture;
 }
-void game_loop(){
+void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
+
+    SDL_Renderer *renderer = *renderer_ptr;
+    SDL_Texture *background_texture = *bg_txtr_ptr;
     //Main loop flag
     bool quit = false;
 
@@ -149,7 +229,7 @@ void game_loop(){
     SDL_Event event;
 
     struct player *donkey_jr = NULL;
-    donkey_jr = create_player();
+    donkey_jr = create_player(renderer_ptr);
 
     SDL_Rect *pos = NULL;
 
@@ -208,7 +288,7 @@ void game_loop(){
                     case SDLK_c:
                         //croc = create_red_croc(cont_temp);
                         //add_red_croc(&first_croc, &last_croc, &croc);
-                        croc = create_blue_croc(cont_temp);
+                        croc = create_blue_croc(renderer_ptr, cont_temp);
                         add_blue_croc(&first_croc, &last_croc, &croc);
                         cont_temp++;
                         break;;

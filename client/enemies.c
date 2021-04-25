@@ -8,7 +8,7 @@
  * @param liana: int
  * @return croc: struct red_croc *
  */
-struct red_croc* create_red_croc(int liana){
+struct red_croc* create_red_croc(SDL_Renderer **renderer_ptr, int liana){
     size_t size = sizeof(struct red_croc);
     struct red_croc * croc = malloc(size); //new struct
 
@@ -17,19 +17,19 @@ struct red_croc* create_red_croc(int liana){
 
     //set all textures (one for every sprite)
     red_croc_path = C_RED_UP0;
-    red_croc_txtr = load_texture(red_croc_path);
+    red_croc_txtr = load_texture(renderer_ptr, red_croc_path);
     croc->up0 = red_croc_txtr;
 
     red_croc_path = C_RED_UP1;
-    red_croc_txtr = load_texture(red_croc_path);
+    red_croc_txtr = load_texture(renderer_ptr, red_croc_path);
     croc->up1 = red_croc_txtr;
 
     red_croc_path = C_RED_DOWN0;
-    red_croc_txtr = load_texture(red_croc_path);
+    red_croc_txtr = load_texture(renderer_ptr, red_croc_path);
     croc->down0 = red_croc_txtr;
 
     red_croc_path = C_RED_DOWN1;
-    red_croc_txtr = load_texture(red_croc_path);
+    red_croc_txtr = load_texture(renderer_ptr, red_croc_path);
     croc->down1 = red_croc_txtr;
 
     croc->sprite = RED_DOWN0;
@@ -85,7 +85,7 @@ struct red_croc* set_position_red(int x, int y, struct red_croc ** red_croc_ptr)
  * @param liana: int
  * @return croc: struct red_croc *
  */
-struct blue_croc* create_blue_croc(int liana){
+struct blue_croc* create_blue_croc(SDL_Renderer **renderer_ptr, int liana){
     size_t size = sizeof(struct blue_croc);
     struct blue_croc * croc = malloc(size); //new struct
 
@@ -94,19 +94,19 @@ struct blue_croc* create_blue_croc(int liana){
 
     //set all textures (one for every sprite)
     blue_croc_path = C_BLUE_UP0;
-    blue_croc_txtr = load_texture(blue_croc_path);
+    blue_croc_txtr = load_texture(renderer_ptr, blue_croc_path);
     croc->up0 = blue_croc_txtr;
 
     blue_croc_path = C_BLUE_UP1;
-    blue_croc_txtr = load_texture(blue_croc_path);
+    blue_croc_txtr = load_texture(renderer_ptr, blue_croc_path);
     croc->up1 = blue_croc_txtr;
 
     blue_croc_path = C_BLUE_DOWN0;
-    blue_croc_txtr = load_texture(blue_croc_path);
+    blue_croc_txtr = load_texture(renderer_ptr, blue_croc_path);
     croc->down0 = blue_croc_txtr;
 
     blue_croc_path = C_BLUE_DOWN1;
-    blue_croc_txtr = load_texture(blue_croc_path);
+    blue_croc_txtr = load_texture(renderer_ptr, blue_croc_path);
     croc->down1 = blue_croc_txtr;
 
     croc->sprite = BLUE_DOWN0;

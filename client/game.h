@@ -14,10 +14,12 @@
 #include "enemies.h"
 
 void start_game();
-bool init_window();
-SDL_Texture *load_texture(const char path[MAX_PATH]);
-void close_window();
-void game_loop();
+SDL_Window *init_wdw();
+SDL_Renderer *init_renderer(SDL_Window ** window_ptr);
+bool init_window(SDL_Window **window_ptr, SDL_Renderer **renderer_ptr);
+SDL_Texture *load_texture(SDL_Renderer **renderer_ptr, const char path[MAX_PATH]);
+void close_window(SDL_Window **window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr);
+void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr);
 void add_player();
 //SDL_Surface * create_background();
 
