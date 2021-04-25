@@ -524,6 +524,27 @@ void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
     }
 }
 
+void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first){
+    struct player * donkey_jr = *donkey_jr_ptr;
+    struct fruit * temp_node = *first;
+    SDL_Rect * pos = NULL;
+    int x_dkr = donkey_jr->pos.x;
+    int y_dkjr = donkey_jr->pos.y;
+    int platform;
+    while(temp_node != NULL){
+        pos = &temp_node->pos;
+        if (is_collision(x_dkr, y_dkjr, pos->x, pos->y, FRUIT_WIDTH, FRUIT_HEIGHT) && temp_node->visible){
+            platform = temp_node->platform;
+            delete_fruit(first, platform);
+            donkey_jr->points += temp_node->points;
+            printf("%d", donkey_jr->points);
+        }
+        temp_node = temp_node->next_node;
+    }
+
+}
+
+
 bool is_collision(int x0, int y0, int x1, int y1, int width, int height){
     if((x0 < x1) && (x0 + DKJR_WIDTH/2 > x1) && (y0 == y1)) return true;
     else if ((x1 < x0) && (x1 + width > x0) && (y0 == y1)) return true;

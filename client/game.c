@@ -285,7 +285,10 @@ void game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
             render_crocs(&renderer, &first_croc);
         }
 
-        if (first_fruit != NULL) render_fruits(&renderer, &first_fruit);
+        if (first_fruit != NULL) {
+            fruit_collision(&donkey_jr, &first_fruit);
+            render_fruits(&renderer, &first_fruit);
+        }
 
         pos = &donkey_jr->pos;
         SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
