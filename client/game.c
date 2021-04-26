@@ -326,6 +326,8 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
             pos = &donkey_jr->pos;
             SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
 
+            SDL_RenderPresent(renderer);
+
             //Update screen
             SDL_RenderPresent( renderer );
 
@@ -348,4 +350,23 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
     free_fruits_list(&first_fruit);
 
     //return next_stats;
+}
+
+/**
+ * Update text with stats
+ * @param window: SDL_
+ * @return
+ */
+SDL_Texture * update_stats(SDL_Window ** window){
+    SDL_Renderer * renderer = SDL_CreateRenderer(*window, -1, 0);
+    TTF_Font * font = TTF_OpenFont("arial.ttf", 25);
+    SDL_Color color = { 0, 0, 0 };
+    SDL_Surface * surface = TTF_RenderText_Solid(font,
+                                                 "Welcome to Gigi Labs", color);
+    SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surface);
+
+    int texW = 100;
+    int texH = 20;
+    SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
+    return texture;
 }
