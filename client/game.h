@@ -27,6 +27,6 @@ SDL_Renderer *init_renderer(SDL_Window ** window_ptr);
 void add_static_textures(SDL_Renderer ** renderer_ptr);
 SDL_Texture *load_texture(SDL_Renderer **renderer_ptr, const char path[MAX_PATH]);
 void close_window(SDL_Window **window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr);
-struct stats * game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points);
+void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points);
 
 #endif //CLIENT_GAME_H

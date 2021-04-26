@@ -1,6 +1,7 @@
 //
 // Created by Luis Pedro Morales on 15/4/21.
 //
+#include <stdbool.h>
 
 #ifndef CLIENT_CONSTANTS_H
 #define CLIENT_CONSTANTS_H
@@ -97,6 +98,20 @@
 int MOV_CROCS;
 #define JUMP_DIFF 60
 
+//actions
+#define ADD_CROC 1
+#define ADD_FRUIT 2
+#define DELETE_FRUIT 3
+
+//croc type
+#define RED 0
+#define BLUE 1
+
+enum messages{
+    ACTION,
+    TYPE,
+    POSITION
+};
 //enum for sprites
 enum donkey_jr_sprite{
     RUN_R0,
@@ -290,9 +305,15 @@ enum fruits_pos{
 };
 
 enum fruit_type{
-    APPLE,
     BANANA,
-    MANGO
+    MANGO,
+    APPLE
+};
+
+enum points{
+    BANANA_PTS = 100,
+    MANGO_PTS = 150,
+    APPLE_PTS = 200
 };
 
 #define WIDTH_LIANA 23

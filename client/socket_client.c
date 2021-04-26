@@ -18,9 +18,53 @@ void *read_stream(struct socket_info **socket_ptr){
                 close(socket);
                 break;
             }else{
-                struct red_croc *croc = NULL;
-                croc = create_red_croc(sock->renderer, 3);
-                add_red_croc(sock->first_croc, sock->first_croc, &croc);
+                const char delim[] = ";";
+                char *message = strtok(buffer + 2, delim);
+                int token_cont = 0;
+                int action, type, pos;
+
+                while(message != NULL){
+                    switch (token_cont) {
+                        case ACTION:
+                            action = atoi(message);
+                            break;
+                        case TYPE:
+                            type = atoi(message);
+                            break;;
+                        case POSITION:
+                            pos = atoi(message);
+                            break;
+                    }
+                    ++token_cont;
+                    printf("%s\t", message);
+                    message = strtok(NULL, delim);
+                }
+                printf("action %d", action);
+                if (action == ADD_CROC){
+                    if (type == RED){
+                        struct red_croc *croc = NULL;
+                        croc = create_red_croc(sock->renderer, pos);
+                        add_red_croc(sock->first_croc, sock->first_croc, &croc);
+                    }else if (type == BLUE){
+                        struct blue_croc *croc = NULL;
+                        croc = create_blue_croc(sock->renderer, pos);
+                        add_blue_croc(sock->first_croc, sock->first_croc, &croc);
+                    }
+                }else if (action == ADD_FRUIT){
+                    struct fruit * temp_fruit = NULL;
+                    if (type == BANANA){
+                        temp_fruit = create_fruit(sock->first_fruit, sock->last_fruit, sock->renderer, pos, BANANA, BANANA_PTS);
+                        add_fruit(sock->first_fruit, sock->last_fruit, &temp_fruit);
+                    }else if (type == MANGO){
+                        temp_fruit = create_fruit(sock->first_fruit, sock->last_fruit, sock->renderer, pos, MANGO, MANGO_PTS);
+                        add_fruit(sock->first_fruit, sock->last_fruit, &temp_fruit);
+                    }else if (type == APPLE){
+                        temp_fruit = create_fruit(sock->first_fruit, sock->last_fruit, sock->renderer, pos, APPLE, APPLE_PTS);
+                        add_fruit(sock->first_fruit, sock->last_fruit, &temp_fruit);
+                    }
+                }else if(action == DELETE_FRUIT){
+                    delete_fruit(sock->first_fruit, pos);
+                }
             }
             fflush(stdout); //clear the buffer
         }
@@ -46,7 +90,7 @@ void *send_stream(void *socket_ptr){
     //}
 }
 
-void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc){
+void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc, struct fruit** first_fruit, struct fruit** last_fruit){
     pthread_t sender_thread, receiver_thread;
     int sock = 0;
     struct sockaddr_in serv_addr;
@@ -78,6 +122,8 @@ void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_
     sock_info->first_croc = first_croc;
     sock_info->last_croc = last_croc;
     sock_info->renderer = renderer_ptr;
+    sock_info->first_fruit = first_fruit;
+    sock_info->last_fruit = last_fruit;
 
     pthread_create(&receiver_thread, NULL, &read_stream, &sock_info);
     //pthread_join(receiver_thread, NULL);
