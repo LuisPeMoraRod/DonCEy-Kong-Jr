@@ -1,10 +1,18 @@
 package ServerGUI;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.VBox;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class ServerGUIController {
 
@@ -42,7 +50,62 @@ public class ServerGUIController {
     private VBox curentVB;
     private String playerSelected = "Player 1";
 
+    Scanner scn = new Scanner(System.in);
+
+    // getting localhost ip
+    InetAddress ip = InetAddress.getByName("localhost");
+
+    // establish the connection
+    Socket s = new Socket(ip, 1234);
+
+    // obtaining input and out streams
+    DataInputStream dis = new DataInputStream(s.getInputStream());
+    DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
+    // sendMessage thread
+    Thread sendMessage = new Thread(new Runnable()
+    {
+        @Override
+        public void run() {
+            while (true) {
+
+                // read the message to deliver.
+                String msg = scn.nextLine();
+
+                try {
+                    // write on the output stream
+                    dos.writeUTF(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+
+    // readMessage thread
+    Thread readMessage = new Thread(new Runnable()
+    {
+        @Override
+        public void run() {
+
+            while (true) {
+                try {
+                    // read the message sent to this client
+                    String msg = dis.readUTF();
+                    System.out.println(msg);
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
+
+
     ControlLists controlLists = ControlLists.getInstance();
+
+    public ServerGUIController() throws IOException {
+    }
 
     public void goBack(ActionEvent actionEvent) {
         mainVb.getChildren().remove(curentVB);
@@ -131,7 +194,7 @@ public class ServerGUIController {
         curentVB = fruitVb;
     }
 
-    public String addCoco(ActionEvent actionEvent) {
+    public void addCoco(ActionEvent actionEvent) {
         String cocoColorSelected = colorSelection.getSelectionModel().getSelectedItem().toString();
         String lianaSelected = lianaSelection.getSelectionModel().getSelectedItem().toString();
         String cocoCode;
@@ -148,14 +211,21 @@ public class ServerGUIController {
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(playerVb);
 
-        String message = "1;"+cocoCode+";"+lianaSelected;
+        String message = "1;"+cocoCode+";"+lianaSelected+"#"+this.playerSelected;
 
         System.out.println(message);
 
-        return message;
+        Platform.runLater(()->{
+        try {
+            // write on the output stream
+            dos.writeUTF(message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }});
+
     }
 
-    public String addBanana(ActionEvent actionEvent) {
+    public void addBanana(ActionEvent actionEvent) {
         String selectedPlatform = platformSelectionAdd.getSelectionModel().getSelectedItem().toString();
         String selectedFruit = fruitSelection.getSelectionModel().getSelectedItem().toString();
         String fruitCode;
@@ -176,14 +246,19 @@ public class ServerGUIController {
         this.controlLists.availablePlatfformList.remove(selectedPlatform);
         this.controlLists.usedPlatfformList.add(selectedPlatform);
 
-        String message = "2;"+fruitCode+";"+selectedPlatform;
+        String message = "2;"+fruitCode+";"+selectedPlatform+"#"+this.playerSelected;
 
-        System.out.println(message);
+        Platform.runLater(()->{
+            try {
+                // write on the output stream
+                dos.writeUTF(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }});
 
-        return message;
     }
 
-    public String removeBanana(ActionEvent actionEvent) {
+    public void removeBanana(ActionEvent actionEvent) {
 
         String selectedPlatform = platformSelectionRemove.getSelectionModel().getSelectedItem().toString();
 
@@ -193,11 +268,18 @@ public class ServerGUIController {
         this.controlLists.usedPlatfformList.remove(selectedPlatform);
         this.controlLists.availablePlatfformList.add(selectedPlatform);
 
-        String message = "3;Fruit;"+selectedPlatform;
+        String message = "3;Fruit;"+selectedPlatform+"#"+this.playerSelected;
 
         System.out.println(message);
 
-        return message;
+        Platform.runLater(()->{
+            try {
+                // write on the output stream
+                dos.writeUTF(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }});
+
     }
 
     public void goBackToPlayers(ActionEvent actionEvent) {

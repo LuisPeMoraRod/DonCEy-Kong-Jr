@@ -33,7 +33,6 @@ public class Client2
                     // read the message to deliver.
                     String msg = scn.nextLine();
 
-
                     try {
                         // write on the output stream
                         dos.writeUTF(msg);
@@ -68,3 +67,4 @@ public class Client2
 
     }
 }
+

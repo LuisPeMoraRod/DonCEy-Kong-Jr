@@ -28,7 +28,6 @@ class ClientHandler implements Runnable
     @Override
     public void run() {
 
-
         String received;
         while (true)
         {
@@ -37,43 +36,32 @@ class ClientHandler implements Runnable
                 // receive the string
                 received = dis.readUTF();
 
-                System.out.println("Mensaje de "+this.name+" "+received);
+                System.out.println(received);
 
                 if(received.equals("logout")){
-
-                    for (ClientHandler mc : Server.players)
-                    {
-                        // if the recipient is found, write on its
-                        // output stream
-                        if (mc.name.equals(this.name) && mc.isloggedin==true)
-                        {
-                            Server.players.remove(mc);
-                        }
-                    }
-
                     this.isloggedin=false;
                     this.s.close();
                     break;
                 }
 
                 // break the string into message and recipient part
-                /*StringTokenizer st = new StringTokenizer(received, "#");
+                StringTokenizer st = new StringTokenizer(received, "#");
                 String MsgToSend = st.nextToken();
-                String recipient = st.nextToken();*/
-
+                String recipient = st.nextToken();
 
                 // search for the recipient in the connected devices list.
                 // ar is the vector storing client of active users
-                /*for (ClientHandler mc : Server.players)
+                for (ClientHandler mc : Server.ar)
                 {
                     // if the recipient is found, write on its
                     // output stream
                     if (mc.name.equals(recipient) && mc.isloggedin==true)
                     {
-                        mc.dos.writeUTF(this.name+" : "+MsgToSend);
+                        mc.dos.writeUTF(MsgToSend);
                         break;
                     }
-                }*/
+                }
+
             } catch (IOException e) {
 
                 e.printStackTrace();
@@ -90,6 +78,4 @@ class ClientHandler implements Runnable
             e.printStackTrace();
         }
     }
-
-
 }
