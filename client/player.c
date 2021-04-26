@@ -551,7 +551,6 @@ void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first){
         }
         temp_node = temp_node->next_node;
     }
-
 }
 
 bool win(struct player **donkey_jr_ptr){

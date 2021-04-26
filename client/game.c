@@ -9,8 +9,7 @@
 /**
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
-void * start_game(){
-
+void * start_game(int port){
     //The window to be rendering
     SDL_Window* window = NULL;
 
@@ -38,7 +37,7 @@ void * start_game(){
                 player_stats->level = 1;
                 MOV_CROCS = 1;
                 while (player_stats->lives > 0){
-                    player_stats = game_loop(&window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
+                    player_stats = game_loop(port, &window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
                 }
                 free(player_stats);
 
@@ -191,7 +190,7 @@ void add_static_textures(SDL_Renderer ** renderer_ptr){
  * @param renderer_ptr: SDL_Renderer **
  * @param bg_txtr_ptr: SDL_Texture **
  */
-struct stats * game_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
+struct stats * game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
     //Main loop flag
@@ -214,6 +213,8 @@ struct stats * game_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
     struct fruit * first_fruit = NULL;
     struct fruit * last_fruit = NULL;
     struct fruit * temp_fruit = NULL;
+
+    create_socket(port, renderer_ptr, &first_croc, &last_croc);
 
     //While application is running
     while( !quit )

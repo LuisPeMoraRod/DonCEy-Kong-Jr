@@ -4,8 +4,9 @@
 
 #include "socket_client.h"
 
-void *read_stream(void *socket_ptr){
-    int socket= *(int*)socket_ptr;
+void *read_stream(struct socket_info **socket_ptr){
+    struct socket_info *sock = *socket_ptr;
+    int socket= sock->socket_ptr;
     for (;;){
         char buffer[MAX_BUFFER]; //buffer size as defined in constants.h
         int x; //last position of buffer
@@ -16,6 +17,10 @@ void *read_stream(void *socket_ptr){
                 printf("Closing socket ...");
                 close(socket);
                 break;
+            }else{
+                struct red_croc *croc = NULL;
+                croc = create_red_croc(sock->renderer, 3);
+                add_red_croc(sock->first_croc, sock->first_croc, &croc);
             }
             fflush(stdout); //clear the buffer
         }
@@ -41,7 +46,7 @@ void *send_stream(void *socket_ptr){
     //}
 }
 
-void create_socket(){
+void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc){
     pthread_t sender_thread, receiver_thread;
     int sock = 0;
     struct sockaddr_in serv_addr;
@@ -52,7 +57,7 @@ void create_socket(){
         exit(EXIT_FAILURE);
     }
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(PORT);
+    serv_addr.sin_port = htons(port);
 
     // Convert IPv4 and IPv6 addresses from text to binary form
     if(inet_pton(AF_INET, IP_ADDRESS, &serv_addr.sin_addr)<=0)
@@ -67,66 +72,15 @@ void create_socket(){
         exit(EXIT_FAILURE);
     }
 
-    pthread_create(&sender_thread, NULL, &send_stream, &sock);
-    pthread_join(sender_thread, NULL);
+    size_t size = sizeof(struct socket_info);
+    struct socket_info * sock_info = malloc(size);
+    sock_info->socket_ptr = sock;
+    sock_info->first_croc = first_croc;
+    sock_info->last_croc = last_croc;
+    sock_info->renderer = renderer_ptr;
+
+    pthread_create(&receiver_thread, NULL, &read_stream, &sock_info);
+    //pthread_join(receiver_thread, NULL);
 }
 
-void create_socket1(){
-    int sockfd, new_socket, len;
-    struct sockaddr_in servaddr, cli;
-
-    // socket create and verification
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd == -1) {
-        printf("Socket creation failed...\n");
-        exit(EXIT_FAILURE);
-    }
-    else
-        printf("Socket successfully created..\n");
-    bzero(&servaddr, sizeof(servaddr));
-
-    // assign IP, PORT
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr.sin_port = htons(PORT);
-
-    // Binding newly created socket to given IP and verification
-    if (bind(sockfd, (SA *) &servaddr, sizeof(servaddr)) != 0) {
-        printf("Socket bind failed...\n");
-        exit(EXIT_FAILURE);
-    }
-    else
-        printf("Successful socket bind..\n");
-
-    // Now server is ready to listen and verification
-    if (listen(sockfd, 5) != 0) {
-        printf("Listen failed...\n");
-        exit(EXIT_FAILURE);
-    }
-    else
-        printf("Server listening..\n");
-    len = sizeof(cli);
-    /*
-    // Accept the data packet from client_ex and verification
-    connfd = accept(sockfd, (SA*)&cli, &len);
-    if (connfd < 0) {
-        printf("server acccept failed...\n");
-        exit(0);
-    }*/
-
-    if ((new_socket = accept(sockfd, (struct sockaddr *)&servaddr,
-                             (socklen_t*)&len))<0)
-    {
-        perror("Server failed accepting socket");
-        exit(EXIT_FAILURE);
-    }
-    printf("server acccept the client_ex...\n");
-
-    // Function for chatting between client_ex and server
-    //read_stream(&new_socket);
-    send_stream(&new_socket);
-
-    // After chatting close_window the socket
-    //close_window(sockfd);
-}
 

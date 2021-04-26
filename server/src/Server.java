@@ -25,14 +25,14 @@ public class Server
         createSocket(this.port);
         //sendStream();
         //receiveStream();
-        StreamReceiver streamReceiver = new StreamReceiver(socket, inputStream);
-        Thread receiverThread = new Thread(streamReceiver);
+        //StreamReceiver streamReceiver = new StreamReceiver(socket, inputStream);
+        //Thread receiverThread = new Thread(streamReceiver);
 
         StreamSender streamSender = new StreamSender(this.inputUser, this.output);
         Thread senderThread = new Thread(streamSender);
 
-        //senderThread.start();
-        receiverThread.start();
+        senderThread.start();
+        //receiverThread.start();
 
     }
 

@@ -5,12 +5,6 @@
 #include "menu.h"
 #include "game.h"
 
-void game_thread(){
-    pthread_t game_t;
-    pthread_create(&game_t, NULL, &start_game, NULL);
-    pthread_join(game_t, NULL);
-}
-
 /**
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
@@ -92,6 +86,7 @@ void add_buttons(SDL_Renderer ** renderer_ptr){
 void menu_loop(SDL_Window ** main_window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
+
     //Main loop flag
     bool quit = false;
     pthread_t game_t;
@@ -131,11 +126,6 @@ void menu_loop(SDL_Window ** main_window_ptr, SDL_Renderer **renderer_ptr, SDL_T
                     quit = true;
                 }
             }
-            /*
-            if(event.type == SDL_QUIT )
-            {
-                quit = true;
-            }*/
             if( event.type == SDL_MOUSEBUTTONDOWN )
             {
                 //If the left mouse button was pressed
@@ -146,14 +136,13 @@ void menu_loop(SDL_Window ** main_window_ptr, SDL_Renderer **renderer_ptr, SDL_T
                     y = event.button.y;
 
                    if(x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN0_Y && y < (BTN0_Y + BTN_HEIGHT)){
-                       //game_thread();
                        quit = true;
-                       close_window(main_window_ptr, &renderer, &background_texture);
-                       start_game();
+                       close_window(main_window_ptr, &renderer, &background_texture); //delete current window
+                       start_game(PORT0); //start window game with socket in port 8080
                    }else if (x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN1_Y && y < (BTN1_Y + BTN_HEIGHT)){
                        quit = true;
                        close_window(main_window_ptr, &renderer, &background_texture);
-                       start_game();
+                       start_game(PORT1);//start window game with socket in port 8081
                    }
                 }
             }
