@@ -14,7 +14,7 @@ CC = gcc
 COMPILER_FLAGS = -w
 
 #LINKER_FLAGS specifies the libraries that being linked against
-LINKER_FLAGS = -lSDL2 -lSDL2_image
+LINKER_FLAGS = -lSDL2 -lSDL2_image -pthread
 
 #OBJ_NAME specifies tha name of our executable
 OBJ_NAME = main

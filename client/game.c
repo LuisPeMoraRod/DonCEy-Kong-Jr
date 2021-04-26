@@ -5,10 +5,11 @@
 
 #include "game.h"
 
+
 /**
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
-void start_game(){
+void * start_game(){
 
     //The window to be rendering
     SDL_Window* window = NULL;
@@ -35,8 +36,8 @@ void start_game(){
                 player_stats->lives = LIVES;
                 player_stats->points = 0;
                 player_stats->level = 1;
-                while (player_stats->lives >= 0){
-                    player_stats = game_loop(&renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
+                while (player_stats->lives > 0){
+                    player_stats = game_loop(&window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
                 }
                 free(player_stats);
 
@@ -189,7 +190,7 @@ void add_static_textures(SDL_Renderer ** renderer_ptr){
  * @param renderer_ptr: SDL_Renderer **
  * @param bg_txtr_ptr: SDL_Texture **
  */
-struct stats * game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
+struct stats * game_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
     //Main loop flag
@@ -220,10 +221,25 @@ struct stats * game_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr,
         //Handle events on queue
         while(SDL_PollEvent( &event ) != 0 )
         {
+            if (event.type == SDL_WINDOWEVENT
+                && event.window.event == SDL_WINDOWEVENT_CLOSE)
+            {
+                // ... Handle window close for each window ...
+                // Note, you can also check e.window.windowID to check which
+                // of your windows the event came from.
+                // e.g.:
+                printf("%d\n", event.window.windowID);
+                if (SDL_GetWindowID(*window_ptr) == event.window.windowID)
+                {
+                    quit = true;
+                    donkey_jr->lives = 0;
+                }
+            }
             //User requests quit
             if(event.type == SDL_QUIT )
             {
                 quit = true;
+                donkey_jr->lives = 0;
             } else if (event.type == SDL_KEYDOWN && !donkey_jr->is_dead){
                 switch (event.key.keysym.sym) {
 

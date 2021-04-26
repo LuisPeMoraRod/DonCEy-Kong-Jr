@@ -5,6 +5,12 @@
 #include "menu.h"
 #include "game.h"
 
+void game_thread(){
+    pthread_t game_t;
+    pthread_create(&game_t, NULL, &start_game, NULL);
+    pthread_join(game_t, NULL);
+}
+
 /**
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
@@ -30,7 +36,7 @@ void start_menu(){
             const char *background_path = MENU_BG;
             background_texture = load_texture(&renderer, background_path);
             if (background_texture != NULL) {
-                menu_loop(&renderer, &background_texture);
+                menu_loop(&window, &renderer, &background_texture);
             } else {
                 printf("Failed to load media!\n");
             }
@@ -83,16 +89,19 @@ void add_buttons(SDL_Renderer ** renderer_ptr){
  * @param renderer_ptr: SDL_Renderer **
  * @param bg_txtr_ptr: SDL_Texture **
  */
-void menu_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
+void menu_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
     //Main loop flag
     bool quit = false;
+    pthread_t game_t;
 
     //Event handler
     SDL_Event event;
 
     SDL_Rect *pos = NULL;
+
+    int x = 0, y = 0;
 
     //While application is running
     while( !quit )
@@ -100,10 +109,29 @@ void menu_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
         //Handle events on queue
         while(SDL_PollEvent( &event ) != 0 )
         {
-            //User requests quit
+
+            /*
             if(event.type == SDL_QUIT )
             {
                 quit = true;
+            }*/
+            if( event.type == SDL_MOUSEBUTTONDOWN )
+            {
+                //If the left mouse button was pressed
+                if( event.button.button == SDL_BUTTON_LEFT )
+                {
+                    //Get the mouse offsets
+                    x = event.button.x;
+                    y = event.button.y;
+
+                   if(x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN0_Y && y < (BTN0_Y + BTN_HEIGHT)){
+                       //game_thread();
+                       quit = true;
+                       pthread_create(&game_t, NULL, &start_game, NULL);
+                       pthread_join(game_t, NULL);
+                       //pthread_create(&game_t, NULL, &start_game, NULL);
+                   }
+                }
             }
         }
 
@@ -115,11 +143,10 @@ void menu_loop(SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
 
         add_buttons(&renderer);
 
-
         //Update screen
         SDL_RenderPresent( renderer );
 
         SDL_Delay( DELAY );
-    }
 
+    }
 }

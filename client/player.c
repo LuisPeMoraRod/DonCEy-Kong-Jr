@@ -514,7 +514,6 @@ void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
             if(is_collision(x_dkr, y_dkjr, pos->x , pos->y, CROC_WIDTH, CROC_HEIGHT)){ //exception for first liana
                 donkey_jr->is_dead = true;
                 donkey_jr->fall = true;
-                donkey_jr->lives -= 1;
                 donkey_jr->sprite = DEATH;
                 donkey_jr->current_texture = donkey_jr->death;
             }
@@ -522,7 +521,6 @@ void enemy_collision(struct player **donkey_jr_ptr, struct node **first){
         if(is_collision(x_dkr, y_dkjr, pos->x - CROC_ADJ, pos->y, CROC_WIDTH, CROC_HEIGHT)){
             donkey_jr->is_dead = true;
             donkey_jr->fall = true;
-            donkey_jr->lives -= 1;
             donkey_jr->sprite = DEATH;
             donkey_jr->current_texture = donkey_jr->death;
         }
