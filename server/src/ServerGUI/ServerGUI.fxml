@@ -119,7 +119,7 @@
                         <Font size="12.0" />
                      </font>
                   </Text>
-                  <Button fx:id="addCocoBtn" mnemonicParsing="false" onAction="#goToCocoMenu" text="Add crocodile">
+                  <Button fx:id="cocoBtn" mnemonicParsing="false" onAction="#goToCocoMenu" text="Add crocodile">
                      <font>
                         <Font size="12.0" />
                      </font>

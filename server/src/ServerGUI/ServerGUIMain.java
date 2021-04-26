@@ -1,16 +1,16 @@
 package ServerGUI;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
+
 public class ServerGUIMain extends Application {
+
 
     public static void main(String[] args) {
         launch(args);
@@ -19,11 +19,13 @@ public class ServerGUIMain extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-
-
-        Parent root = FXMLLoader.load(getClass().getResource("ServerGUI.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ServerGUI.fxml"));
+        Parent root = loader.load();
 
         Scene scene = new Scene(root, 583, 403);
+
+        ServerGUIController serverGUIController = loader.getController();
+        serverGUIController.initLists();
 
         primaryStage.setTitle("DonCE Kong JR. Server");
         primaryStage.setScene(scene);
