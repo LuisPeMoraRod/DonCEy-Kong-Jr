@@ -4,7 +4,7 @@
 #	$(CC) main.c game.c components.c -o main `sdl-config --cflags --libs`
 
 #OBJS specifies which files to compile as part of the project
-OBJS = main.c game.c player.c enemies.c fruits.c menu.c
+OBJS = main.c game.c player.c enemies.c fruits.c menu.c socket_client.c
 
 #CC specifies which compiler is used
 CC = gcc

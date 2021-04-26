@@ -551,9 +551,22 @@ void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first){
         }
         temp_node = temp_node->next_node;
     }
-
 }
 
+bool win(struct player **donkey_jr_ptr){
+    struct player * donkey_jr = *donkey_jr_ptr;
+    int x = donkey_jr->pos.x, y = donkey_jr->pos.y;
+    if(x > KEY_X && x < (KEY_X + 5) && y > KEY_Y && y < (KEY_Y + KEY_HEIGHT)){
+        donkey_jr->lives += 1;
+        donkey_jr->level += 1;
+        MOV_CROCS += 1;
+        SDL_Delay(DELAY_WIN);
+        donkey_jr->pos.x = DK_X0;
+        donkey_jr->pos.y = DK_Y0;
+        return true;
+    }
+    return false;
+}
 /**
  * Compares positions to check if there has been a collision
  * @param x0
@@ -581,6 +594,8 @@ bool death(struct player **donkey_jr_ptr){
     struct player *donkey_jr = *donkey_jr_ptr;
     if(donkey_jr->pos.y >= WIN_HEIGHT){
         donkey_jr->lives -= 1;
+        donkey_jr->pos.x = DK_X0;
+        donkey_jr->pos.y = DK_Y0;
         return true;
     }
     return false;

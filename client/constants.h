@@ -1,12 +1,14 @@
 //
 // Created by Luis Pedro Morales on 15/4/21.
 //
+#include <stdbool.h>
 
 #ifndef CLIENT_CONSTANTS_H
 #define CLIENT_CONSTANTS_H
 
 #define IP_ADDRESS "127.0.0.1"
-#define PORT 8081
+#define PORT0 8080
+#define PORT1 8081
 #define MAX_BUFFER 300
 #define SA struct sockaddr //socket address
 
@@ -73,7 +75,7 @@
 #define M_HEIGHT 32
 
 #define KEY "resources/key.png"
-#define KEY_X 170
+#define KEY_X 130
 #define KEY_Y 60
 #define KEY_WIDTH 34
 #define KEY_HEIGHT 36
@@ -93,9 +95,23 @@
 //movement distances
 #define JUMP 1
 #define MOV 8
-#define MOV_CROCS 1
+int MOV_CROCS;
 #define JUMP_DIFF 60
 
+//actions
+#define ADD_CROC 1
+#define ADD_FRUIT 2
+#define DELETE_FRUIT 3
+
+//croc type
+#define RED 0
+#define BLUE 1
+
+enum messages{
+    ACTION,
+    TYPE,
+    POSITION
+};
 //enum for sprites
 enum donkey_jr_sprite{
     RUN_R0,
@@ -135,6 +151,7 @@ enum crocs_sprite{
 
 #define LIVES 3
 #define DELAY 10
+#define DELAY_WIN 1000
 #define DELAY_CROCS 10
 
 //platforms
@@ -288,9 +305,15 @@ enum fruits_pos{
 };
 
 enum fruit_type{
-    APPLE,
     BANANA,
-    MANGO
+    MANGO,
+    APPLE
+};
+
+enum points{
+    BANANA_PTS = 100,
+    MANGO_PTS = 150,
+    APPLE_PTS = 200
 };
 
 #define WIDTH_LIANA 23

@@ -63,5 +63,6 @@ bool fall_liana(int x, int y);
 void enemy_collision(struct player **donkey_jr_ptr, struct node **first);
 void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first);
 bool is_collision(int x0, int y0, int x1, int y1, int width, int height);
+bool win(struct player **donkey_jr_ptr);
 
 #endif //CLIENT_PLAYER_H

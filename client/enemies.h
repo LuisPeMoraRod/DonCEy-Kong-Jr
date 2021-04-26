@@ -53,8 +53,8 @@ struct blue_croc* create_blue_croc(SDL_Renderer **renderer_ptr, int liana);
 struct blue_croc* set_position_blue(int x, int y, struct blue_croc ** blue_croc_ptr);
 void free_red_croc(struct red_croc** red_croc_ptr);
 void free_blue_croc(struct blue_croc** blue_croc_ptr);
-void control_crocs_mov(struct node ** first_ptr);
-void movement_blue_croc(struct blue_croc ** blue_croc_ptr);
-void movement_red_croc(struct red_croc ** red_croc_ptr);
+void control_crocs_mov(struct player **donkey_jr_ptr, struct node ** first_ptr);
+void movement_blue_croc(struct player **donkey_jr_ptr, struct blue_croc ** blue_croc_ptr);
+void movement_red_croc(struct player **donkey_jr_ptr, struct red_croc ** red_croc_ptr);
 
 #endif //CLIENT_ENEMIES_H

@@ -17,6 +17,6 @@ struct box{
 void game_thread();
 void start_menu();
 void add_buttons(SDL_Renderer ** renderer_ptr);
-void menu_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr);
+void menu_loop(SDL_Window ** main_window_ptr,SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr);
 
 #endif //CLIENT_MENU_H

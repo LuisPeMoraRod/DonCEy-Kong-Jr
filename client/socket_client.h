@@ -13,14 +13,20 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <pthread.h>
-
 #include "constants.h"
+#include "game.h"
 
-void *read_stream(void *socket_ptr);
+struct socket_info{
+    void *socket_ptr;
+    SDL_Renderer *renderer;
+    struct node ** first_croc;
+    struct node** last_croc;
+    struct fruit** first_fruit;
+    struct fruit** last_fruit;
+};
+void *read_stream(struct socket_info **socket_ptr);
 void *send_stream(void *socket_ptr);
 
-void create_socket1();
-
-void create_socket();
+void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc, struct fruit** first_fruit, struct fruit** last_fruit);
 
 #endif //CLIENT_SOCKET_CLIENT_H

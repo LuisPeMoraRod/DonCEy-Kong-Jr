@@ -9,8 +9,7 @@
 /**
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
-void * start_game(){
-
+void * start_game(int port){
     //The window to be rendering
     SDL_Window* window = NULL;
 
@@ -36,9 +35,11 @@ void * start_game(){
                 player_stats->lives = LIVES;
                 player_stats->points = 0;
                 player_stats->level = 1;
+                MOV_CROCS = 1;/*
                 while (player_stats->lives > 0){
-                    player_stats = game_loop(&window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
-                }
+                    player_stats = game_loop(port, &window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
+                }*/
+                game_loop(port, &window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
                 free(player_stats);
 
             } else {
@@ -190,11 +191,9 @@ void add_static_textures(SDL_Renderer ** renderer_ptr){
  * @param renderer_ptr: SDL_Renderer **
  * @param bg_txtr_ptr: SDL_Texture **
  */
-struct stats * game_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
+void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
-    //Main loop flag
-    bool quit = false;
 
     //Event handler
     SDL_Event event;
@@ -214,127 +213,139 @@ struct stats * game_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
     struct fruit * last_fruit = NULL;
     struct fruit * temp_fruit = NULL;
 
-    //While application is running
-    while( !quit )
-    {
-        quit = death(&donkey_jr);
-        //Handle events on queue
-        while(SDL_PollEvent( &event ) != 0 )
+    create_socket(port, renderer_ptr, &first_croc, &last_croc, &first_fruit, &last_fruit);
+    while(donkey_jr->lives >0 ){
+
+        //Main loop flag
+        bool quit = false;
+
+        donkey_jr->is_dead = false;
+        donkey_jr->fall = false;
+        donkey_jr->sprite = STAND_R0;
+        donkey_jr->current_texture = donkey_jr->stand_right;
+
+        //While application is running
+        while( !quit )
         {
-            if (event.type == SDL_WINDOWEVENT
-                && event.window.event == SDL_WINDOWEVENT_CLOSE)
+            quit = death(&donkey_jr);
+            if (!quit) quit = win(&donkey_jr);
+            //Handle events on queue
+            while(SDL_PollEvent( &event ) != 0 )
             {
-                // ... Handle window close for each window ...
-                // Note, you can also check e.window.windowID to check which
-                // of your windows the event came from.
-                // e.g.:
-                printf("%d\n", event.window.windowID);
-                if (SDL_GetWindowID(*window_ptr) == event.window.windowID)
+                if (event.type == SDL_WINDOWEVENT
+                    && event.window.event == SDL_WINDOWEVENT_CLOSE)
+                {
+
+                    if (SDL_GetWindowID(*window_ptr) == event.window.windowID)
+                    {
+                        quit = true;
+                        donkey_jr->lives = 0;
+                    }
+                }
+                //User requests quit
+                if(event.type == SDL_QUIT )
                 {
                     quit = true;
                     donkey_jr->lives = 0;
+                } else if (event.type == SDL_KEYDOWN && !donkey_jr->is_dead){
+                    switch (event.key.keysym.sym) {
+
+                        case SDLK_d: //move to the right
+                            if(donkey_jr->liana){
+                                r_side_liana(&donkey_jr);
+                            }else{
+                                move_right(&donkey_jr);
+                            }
+                            break;
+
+                        case SDLK_a: //move to the left
+                            if(donkey_jr->liana){
+                                l_side_liana(&donkey_jr);
+                            }else{
+                                move_left(&donkey_jr);
+                            }
+                            break;
+
+                        case SDLK_w: //climb is_up the liana
+                            if(donkey_jr->liana){
+                                move_up(&donkey_jr);
+                            }
+                            break;
+
+                        case SDLK_s:
+                            if(donkey_jr->liana){
+                                move_down(&donkey_jr);
+                            }
+                            break;
+
+                        case SDLK_SPACE:
+                            jump(&donkey_jr);
+                            break;
+
+                        case SDLK_c:
+                            croc = create_red_croc(renderer_ptr, cont_temp);
+                            add_red_croc(&first_croc, &last_croc, &croc);
+                            temp_fruit = create_fruit(&first_fruit, &last_fruit, renderer_ptr, cont_temp, APPLE, 100);
+                            add_fruit(&first_fruit, &last_fruit, &temp_fruit);
+                            cont_temp++;
+                            break;
+
+                        case SDLK_e:
+                            croc2 = create_blue_croc(renderer_ptr, cont_temp);
+                            add_blue_croc(&first_croc, &last_croc, &croc2);
+                            cont_temp++;
+                            break;
+
+                    }
                 }
             }
-            //User requests quit
-            if(event.type == SDL_QUIT )
-            {
-                quit = true;
-                donkey_jr->lives = 0;
-            } else if (event.type == SDL_KEYDOWN && !donkey_jr->is_dead){
-                switch (event.key.keysym.sym) {
 
-                    case SDLK_d: //move to the right
-                        if(donkey_jr->liana){
-                            r_side_liana(&donkey_jr);
-                        }else{
-                            move_right(&donkey_jr);
-                        }
-                        break;
+            //controls jump and falling movements
+            control_dk_movement(&donkey_jr);
 
-                    case SDLK_a: //move to the left
-                        if(donkey_jr->liana){
-                            l_side_liana(&donkey_jr);
-                        }else{
-                            move_left(&donkey_jr);
-                        }
-                        break;
+            //Clear screen
+            SDL_RenderClear(renderer);
 
-                    case SDLK_w: //climb is_up the liana
-                        if(donkey_jr->liana){
-                            move_up(&donkey_jr);
-                        }
-                        break;
+            //Render background_texture to screen
+            SDL_RenderCopy(renderer, background_texture, NULL, NULL );
 
-                    case SDLK_s:
-                        if(donkey_jr->liana){
-                            move_down(&donkey_jr);
-                        }
-                        break;
+            add_static_textures(&renderer);
 
-                    case SDLK_SPACE:
-                        jump(&donkey_jr);
-                        break;
-
-                    case SDLK_c:
-                        croc = create_red_croc(renderer_ptr, cont_temp);
-                        add_red_croc(&first_croc, &last_croc, &croc);
-                        temp_fruit = create_fruit(&first_fruit, &last_fruit, renderer_ptr, cont_temp, APPLE, 100);
-                        add_fruit(&first_fruit, &last_fruit, &temp_fruit);
-                        cont_temp++;
-                        break;
-
-                    case SDLK_e:
-                        croc2 = create_blue_croc(renderer_ptr, cont_temp);
-                        add_blue_croc(&first_croc, &last_croc, &croc2);
-                        cont_temp++;
-                        break;
-
-                }
+            //paint all crocs
+            if(first_croc != NULL){
+                enemy_collision(&donkey_jr, &first_croc);//checks for collisions with enemies
+                control_crocs_mov(&donkey_jr, &first_croc);
+                render_crocs(&renderer, &first_croc);
             }
+
+            if (first_fruit != NULL) {
+                fruit_collision(&donkey_jr, &first_fruit);
+                render_fruits(&renderer, &first_fruit);
+            }
+
+            pos = &donkey_jr->pos;
+            SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
+
+            //Update screen
+            SDL_RenderPresent( renderer );
+
+            SDL_Delay( DELAY );
         }
 
-        //controls jump and falling movements
-        control_dk_movement(&donkey_jr);
+/*
+        size_t size = sizeof (struct stats);
+        struct stats * next_stats = malloc(size);
+        next_stats->lives = donkey_jr->lives;
+        next_stats->level += 1;
+        next_stats->points = donkey_jr->points;*/
 
-        //Clear screen
-        SDL_RenderClear(renderer);
 
-        //Render background_texture to screen
-        SDL_RenderCopy(renderer, background_texture, NULL, NULL );
-
-        add_static_textures(&renderer);
-
-        //paint all crocs
-        if(first_croc != NULL){
-            enemy_collision(&donkey_jr, &first_croc);//checks for collisions with enemies
-            control_crocs_mov(&first_croc);
-            render_crocs(&renderer, &first_croc);
-        }
-
-        if (first_fruit != NULL) {
-            fruit_collision(&donkey_jr, &first_fruit);
-            render_fruits(&renderer, &first_fruit);
-        }
-
-        pos = &donkey_jr->pos;
-        SDL_RenderCopy(renderer, donkey_jr->current_texture, NULL, pos );
-
-        //Update screen
-        SDL_RenderPresent( renderer );
-
-        SDL_Delay( DELAY );
     }
 
-
-    size_t size = sizeof (struct stats);
-    struct stats * next_stats = malloc(size);
-    next_stats->lives = donkey_jr->lives;
-    next_stats->level += 1;
-    next_stats->points = donkey_jr->points;
 
     free_player(&donkey_jr); //free resources
     free_croc_list(&first_croc);
     free_fruits_list(&first_fruit);
 
-    return next_stats;
+    //return next_stats;
 }
