@@ -73,7 +73,7 @@
 #define M_HEIGHT 32
 
 #define KEY "resources/key.png"
-#define KEY_X 170
+#define KEY_X 130
 #define KEY_Y 60
 #define KEY_WIDTH 34
 #define KEY_HEIGHT 36
@@ -93,7 +93,7 @@
 //movement distances
 #define JUMP 1
 #define MOV 8
-#define MOV_CROCS 1
+int MOV_CROCS;
 #define JUMP_DIFF 60
 
 //enum for sprites
@@ -135,6 +135,7 @@ enum crocs_sprite{
 
 #define LIVES 3
 #define DELAY 10
+#define DELAY_WIN 1000
 #define DELAY_CROCS 10
 
 //platforms

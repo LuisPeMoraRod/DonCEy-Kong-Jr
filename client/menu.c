@@ -16,27 +16,27 @@ void game_thread(){
  */
 void start_menu(){
 
-    //The window to be rendering
-    SDL_Window* window = NULL;
+    //The main_window to be rendering
+    SDL_Window* main_window = NULL;
 
-    //The window renderer
+    //The main_window renderer
     SDL_Renderer* renderer = NULL;
 
     //Current displayed background_texture
     SDL_Texture* background_texture = NULL;
 
-    window = init_wdw();
+    main_window = init_wdw();
 
-    if(window == NULL )
+    if(main_window == NULL )
     {
         printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
     }else{
-        renderer = init_renderer(&window);
+        renderer = init_renderer(&main_window);
         if(renderer != NULL){
             const char *background_path = MENU_BG;
             background_texture = load_texture(&renderer, background_path);
             if (background_texture != NULL) {
-                menu_loop(&window, &renderer, &background_texture);
+                menu_loop(&main_window, &renderer, &background_texture);
             } else {
                 printf("Failed to load media!\n");
             }
@@ -44,7 +44,7 @@ void start_menu(){
     }
 
     //Free resources and close SDL
-    close_window(&window, &renderer, &background_texture);
+    //close_window(&main_window, &renderer, &background_texture);
 }
 
 /**
@@ -89,7 +89,7 @@ void add_buttons(SDL_Renderer ** renderer_ptr){
  * @param renderer_ptr: SDL_Renderer **
  * @param bg_txtr_ptr: SDL_Texture **
  */
-void menu_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
+void menu_loop(SDL_Window ** main_window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
     //Main loop flag
@@ -106,10 +106,31 @@ void menu_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Textur
     //While application is running
     while( !quit )
     {
+        //Clear screen
+        SDL_RenderClear(renderer);
+
+        //Render background_texture to screen
+        SDL_RenderCopy(renderer, background_texture, NULL, NULL );
+
+        add_buttons(&renderer);
+
+        //Update screen
+        SDL_RenderPresent( renderer );
+
+        SDL_Delay( DELAY );
+
         //Handle events on queue
         while(SDL_PollEvent( &event ) != 0 )
         {
+            if (event.type == SDL_WINDOWEVENT
+                && event.window.event == SDL_WINDOWEVENT_CLOSE)
+            {
 
+                if (SDL_GetWindowID(*main_window_ptr) == event.window.windowID)
+                {
+                    quit = true;
+                }
+            }
             /*
             if(event.type == SDL_QUIT )
             {
@@ -127,26 +148,16 @@ void menu_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Textur
                    if(x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN0_Y && y < (BTN0_Y + BTN_HEIGHT)){
                        //game_thread();
                        quit = true;
-                       pthread_create(&game_t, NULL, &start_game, NULL);
-                       pthread_join(game_t, NULL);
-                       //pthread_create(&game_t, NULL, &start_game, NULL);
+                       close_window(main_window_ptr, &renderer, &background_texture);
+                       start_game();
+                   }else if (x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN1_Y && y < (BTN1_Y + BTN_HEIGHT)){
+                       quit = true;
+                       close_window(main_window_ptr, &renderer, &background_texture);
+                       start_game();
                    }
                 }
             }
         }
-
-        //Clear screen
-        SDL_RenderClear(renderer);
-
-        //Render background_texture to screen
-        SDL_RenderCopy(renderer, background_texture, NULL, NULL );
-
-        add_buttons(&renderer);
-
-        //Update screen
-        SDL_RenderPresent( renderer );
-
-        SDL_Delay( DELAY );
 
     }
 }

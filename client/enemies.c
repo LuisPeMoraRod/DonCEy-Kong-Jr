@@ -210,16 +210,16 @@ void add_blue_croc(struct node ** first, struct node** last, struct blue_croc **
  * Loops the crocs linked list to update each element's position
  * @param first_ptr: struct node **
  */
-void control_crocs_mov(struct node ** first_ptr){
+void control_crocs_mov(struct player **donkey_jr_ptr, struct node ** first_ptr){
     struct node * first = *first_ptr;
     struct node * temp_ptr = first;
     while(temp_ptr != NULL){
         if(temp_ptr->red_croc_ptr != NULL){
-            movement_red_croc(&temp_ptr->red_croc_ptr);
+            movement_red_croc(donkey_jr_ptr, &temp_ptr->red_croc_ptr);
         }
 
         if(temp_ptr->blue_croc_ptr != NULL){
-            movement_blue_croc(&temp_ptr->blue_croc_ptr);
+            movement_blue_croc(donkey_jr_ptr, &temp_ptr->blue_croc_ptr);
         }
         temp_ptr = temp_ptr->next_node;
     }
@@ -229,18 +229,10 @@ void control_crocs_mov(struct node ** first_ptr){
  * Controls movement for red crocs (up and down the liana without falling)
  * @param red_croc_ptr: struct red_croc **
  */
-void movement_red_croc(struct red_croc ** red_croc_ptr){
+void movement_red_croc(struct player **donkey_jr_ptr, struct red_croc ** red_croc_ptr){
+    struct player * donkey_jr = *donkey_jr_ptr;
     struct red_croc * croc = *red_croc_ptr;
-    if(top_liana(croc->pos.x - CROC_ADJ, croc->pos.y) || top_liana(croc->pos.x, croc->pos.y)){
-        croc->is_up = false;
-        croc->sprite = RED_DOWN0;
-        croc->current_texture = croc->down0;
-    }
-    if (fall_liana(croc->pos.x - CROC_ADJ, croc->pos.y) || fall_liana(croc->pos.x, croc->pos.y)) {
-        croc->is_up = true;
-        croc->sprite = RED_UP0;
-        croc->current_texture = croc->up0;
-    }
+    int velocity = donkey_jr->level;
     if(!croc->is_up){
         croc->pos.y += MOV_CROCS;
         if(croc->sprite == RED_DOWN0 && (croc->pos.y%DELAY_CROCS == 0)){
@@ -260,13 +252,23 @@ void movement_red_croc(struct red_croc ** red_croc_ptr){
             croc->current_texture = croc->up0;
         }
     }
+    if(top_liana(croc->pos.x - CROC_ADJ, croc->pos.y) || top_liana(croc->pos.x, croc->pos.y)){
+        croc->is_up = false;
+        croc->sprite = RED_DOWN0;
+        croc->current_texture = croc->down0;
+    }
+    if (fall_liana(croc->pos.x - CROC_ADJ, croc->pos.y) || fall_liana(croc->pos.x, croc->pos.y)) {
+        croc->is_up = true;
+        croc->sprite = RED_UP0;
+        croc->current_texture = croc->up0;
+    }
 }
 
 /**
  * Controls movement for blue crocs : fall down the lianas
  * @param blue_croc_ptr: struct blue_croc **
  */
-void movement_blue_croc(struct blue_croc ** blue_croc_ptr){
+void movement_blue_croc(struct player **donkey_jr_ptr, struct blue_croc ** blue_croc_ptr){
     struct blue_croc * croc = *blue_croc_ptr;
     if(!(croc->pos.y > WIN_HEIGHT)){
         croc->pos.y += MOV_CROCS;

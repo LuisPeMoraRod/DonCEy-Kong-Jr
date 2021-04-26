@@ -36,6 +36,7 @@ void * start_game(){
                 player_stats->lives = LIVES;
                 player_stats->points = 0;
                 player_stats->level = 1;
+                MOV_CROCS = 1;
                 while (player_stats->lives > 0){
                     player_stats = game_loop(&window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
                 }
@@ -218,17 +219,14 @@ struct stats * game_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
     while( !quit )
     {
         quit = death(&donkey_jr);
+        if (!quit) quit = win(&donkey_jr);
         //Handle events on queue
         while(SDL_PollEvent( &event ) != 0 )
         {
             if (event.type == SDL_WINDOWEVENT
                 && event.window.event == SDL_WINDOWEVENT_CLOSE)
             {
-                // ... Handle window close for each window ...
-                // Note, you can also check e.window.windowID to check which
-                // of your windows the event came from.
-                // e.g.:
-                printf("%d\n", event.window.windowID);
+
                 if (SDL_GetWindowID(*window_ptr) == event.window.windowID)
                 {
                     quit = true;
@@ -307,7 +305,7 @@ struct stats * game_loop(SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
         //paint all crocs
         if(first_croc != NULL){
             enemy_collision(&donkey_jr, &first_croc);//checks for collisions with enemies
-            control_crocs_mov(&first_croc);
+            control_crocs_mov(&donkey_jr, &first_croc);
             render_crocs(&renderer, &first_croc);
         }
 
