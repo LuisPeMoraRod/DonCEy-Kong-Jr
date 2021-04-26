@@ -24,8 +24,8 @@ public class ServerGUIMain extends Application {
 
         Scene scene = new Scene(root, 583, 403);
 
-        ServerGUIController serverGUIController = loader.getController();
-        serverGUIController.initLists();
+        //ServerGUIController serverGUIController = loader.getController();
+
 
         primaryStage.setTitle("DonCE Kong JR. Server");
         primaryStage.setScene(scene);

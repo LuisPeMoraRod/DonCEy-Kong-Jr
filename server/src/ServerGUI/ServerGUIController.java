@@ -5,8 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.VBox;
-import java.util.List;
-import java.util.Vector;
 
 public class ServerGUIController {
 
@@ -33,21 +31,9 @@ public class ServerGUIController {
     @FXML
     private Button removeBananaBtn;
 
-
     private VBox curentVB;
-    private List<String> lianasList = new Vector<String>(11);
-    private List<String> availablePlatfformList = new Vector<String>(11);
-    private List<String> usedPlatfformList= new Vector<String>(11);
 
-    public void initLists(){
-        for(int i = 1; i<=11; i++){
-            this.lianasList.add(String.valueOf(i));
-        }
-
-        for (int i = 1; i<=10; i++){
-            this.availablePlatfformList.add(String.valueOf(i));
-        }
-    }
+    ControlLists controlLists = ControlLists.getInstance();
 
     public void goBack(ActionEvent actionEvent) {
         mainVb.getChildren().remove(curentVB);
@@ -56,7 +42,7 @@ public class ServerGUIController {
 
     public void goToCocoMenu(ActionEvent actionEvent) {
 
-        if(lianasList.size()==0){
+        if(controlLists.lianasList.size()==0){
             lianaSelection.setDisable(true);
             addCocoBtn.setDisable(true);
         }
@@ -74,8 +60,8 @@ public class ServerGUIController {
        colorSelection.getItems().add("Blue");
 
        lianaSelection.getItems().clear();
-       for(int i = 0; i < lianasList.size(); i++){
-           lianaSelection.getItems().add(lianasList.get(i));
+       for(int i = 0; i < controlLists.lianasList.size(); i++){
+           lianaSelection.getItems().add(controlLists.lianasList.get(i));
        }
 
        lianaSelection.getSelectionModel().selectFirst();
@@ -88,7 +74,7 @@ public class ServerGUIController {
 
     public void goToFruitMenu(ActionEvent actionEvent) {
 
-        if(availablePlatfformList.size()==0){
+        if(controlLists.availablePlatfformList.size()==0){
             platformSelectionAdd.setDisable(true);
             addBananaBtn.setDisable(true);
         }
@@ -98,7 +84,7 @@ public class ServerGUIController {
             addBananaBtn.setDisable(false);
         }
 
-        if(usedPlatfformList.size()==0){
+        if(controlLists.usedPlatfformList.size()==0){
             platformSelectionRemove.setDisable(true);
             removeBananaBtn.setDisable(true);
         }
@@ -113,14 +99,14 @@ public class ServerGUIController {
 
         platformSelectionAdd.getItems().clear();
 
-        for(int i = 0; i<availablePlatfformList.size(); i++){
-            platformSelectionAdd.getItems().add(availablePlatfformList.get(i));
+        for(int i = 0; i<controlLists.availablePlatfformList.size(); i++){
+            platformSelectionAdd.getItems().add(controlLists.availablePlatfformList.get(i));
         }
 
         platformSelectionRemove.getItems().clear();
 
-        for(int i = 0; i < usedPlatfformList.size(); i++){
-            platformSelectionRemove.getItems().add(usedPlatfformList.get(i));
+        for(int i = 0; i < controlLists.usedPlatfformList.size(); i++){
+            platformSelectionRemove.getItems().add(controlLists.usedPlatfformList.get(i));
         }
 
         platformSelectionAdd.getSelectionModel().selectFirst();
@@ -133,7 +119,7 @@ public class ServerGUIController {
         String cocoColorSelected = colorSelection.getSelectionModel().getSelectedItem().toString();
         String lianaSelected = lianaSelection.getSelectionModel().getSelectedItem().toString();
 
-        this.lianasList.remove(lianaSelected);
+        this.controlLists.lianasList.remove(lianaSelected);
 
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(optionsVb);
@@ -151,8 +137,8 @@ public class ServerGUIController {
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(optionsVb);
 
-        this.availablePlatfformList.remove(selectedPlatform);
-        this.usedPlatfformList.add(selectedPlatform);
+        this.controlLists.availablePlatfformList.remove(selectedPlatform);
+        this.controlLists.usedPlatfformList.add(selectedPlatform);
 
         String message = "2;"+selectedPlatform;
 
@@ -168,8 +154,8 @@ public class ServerGUIController {
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(optionsVb);
 
-        this.usedPlatfformList.remove(selectedPlatform);
-        this.availablePlatfformList.add(selectedPlatform);
+        this.controlLists.usedPlatfformList.remove(selectedPlatform);
+        this.controlLists.availablePlatfformList.add(selectedPlatform);
 
         String message = "3;"+selectedPlatform;
 
