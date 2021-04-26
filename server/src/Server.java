@@ -1,71 +1,62 @@
-import Communication.StreamReceiver;
-import Communication.StreamSender;
+// Java implementation of Server side
+// It contains two classes : Server and ClientHandler
+// Save file as Server.java
 
-import java.net.*;
 import java.io.*;
+import java.util.*;
+import java.net.*;
 
-/**
- * Main class that instantiates a server socket, accepts a connection from
- * a client and send an int and a string.
- */
+// Server class
 public class Server
 {
-    private int port = 0;
-    private Socket socket            = null;
-    private ServerSocket serverSocket = null;
-    private DataInputStream inputUser = null;
-    private InputStream inputStream = null;
-    private DataOutputStream output     = null;
-    /**
-     * Constructor method
-     */
-    public Server(int port)
+
+    // Vector to store active clients
+    static Vector<ClientHandler> players = new Vector<>();
+
+    // counter for clients
+    static int i = 1;
+
+    public static void main(String[] args) throws IOException
     {
-        this.port = port;
-        createSocket(this.port);
-        //sendStream();
-        //receiveStream();
-        StreamReceiver streamReceiver = new StreamReceiver(socket, inputStream);
-        Thread receiverThread = new Thread(streamReceiver);
+        // server is listening on port 1234
+        ServerSocket ss = new ServerSocket(1234);
 
-        StreamSender streamSender = new StreamSender(this.inputUser, this.output);
-        Thread senderThread = new Thread(streamSender);
+        Socket s;
 
-        //senderThread.start();
-        receiverThread.start();
-
-    }
-
-    /**
-     * Creates socket as a server
-     * @return void
-     */
-    private void createSocket(int port){
-        try
+        // running infinite loop for getting
+        // client request
+        while (true)
         {
-            this.serverSocket = new ServerSocket(this.port);
-            System.out.println("Server started\nWaiting for a client...");
-            //socket = new Socket(ipAddress, port);
-            this.socket = serverSocket.accept();
-            System.out.println("A client connected to Java server...");
-            this.output = new DataOutputStream(this.socket.getOutputStream());
-            this.inputUser = new DataInputStream(System.in); //input from console
-            this.inputStream = socket.getInputStream(); //input from socket stream
-        }
-        catch(UnknownHostException u)
-        {
-            System.out.println(u);
-        }
-        catch(IOException i)
-        {
-            System.out.println(i);
-        }
+            // Accept the incoming request
+            s = ss.accept();
 
-    }
+            System.out.println("New client request received : " + s);
 
-    public static void main (String [] args)
-    {
-        new Server(8081);
+            // obtain input and output streams
+            DataInputStream dis = new DataInputStream(s.getInputStream());
+            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+
+            System.out.println("Creating a new handler for this client...");
+
+            // Create a new handler object for handling this request.
+            ClientHandler mtch = new ClientHandler(s,"player" + i, dis, dos);
+
+            // Create a new Thread with this object.
+            Thread t = new Thread(mtch);
+
+            System.out.println("Adding this client to active client list");
+
+            // add this client to active clients list
+            players.add(mtch);
+
+            // start the thread.
+            t.start();
+
+            // increment i for new client.
+            // i is used for naming only, and can be replaced
+            // by any naming scheme
+            i++;
+
+        }
     }
 }
-

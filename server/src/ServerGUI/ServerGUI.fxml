@@ -73,8 +73,16 @@
                   <Font size="12.0" />
                </font>
             </Text>
-            <ChoiceBox fx:id="platformSelectionAdd" prefHeight="27.0" prefWidth="82.0" />
-            <Button fx:id="addBananaBtn" mnemonicParsing="false" onAction="#addBanana" text="Add banana">
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <ChoiceBox fx:id="platformSelectionAdd" prefHeight="27.0" prefWidth="82.0" />
+                  <ChoiceBox fx:id="fruitSelection" prefHeight="27.0" prefWidth="82.0" />
+               </children>
+               <padding>
+                  <Insets left="15.0" />
+               </padding>
+            </HBox>
+            <Button fx:id="addBananaBtn" mnemonicParsing="false" onAction="#addBanana" text="Add fruit">
                <font>
                   <Font size="11.0" />
                </font>
@@ -85,7 +93,7 @@
                </font>
             </Text>
             <ChoiceBox fx:id="platformSelectionRemove" prefHeight="27.0" prefWidth="82.0" />
-            <Button fx:id="removeBananaBtn" mnemonicParsing="false" onAction="#removeBanana" text="Remove banana">
+            <Button fx:id="removeBananaBtn" mnemonicParsing="false" onAction="#removeBanana" text="Remove fruit">
                <font>
                   <Font size="11.0" />
                </font>
@@ -106,7 +114,7 @@
       </VBox>
       <VBox fx:id="mainVb" layoutX="-1.0" layoutY="72.0" prefHeight="325.0" prefWidth="213.0">
          <children>
-            <VBox fx:id="optionsVb" alignment="TOP_CENTER" prefHeight="331.0" prefWidth="213.0" spacing="20.0">
+            <VBox fx:id="playerVb" alignment="TOP_CENTER" prefHeight="331.0" prefWidth="213.0" spacing="20.0">
                <opaqueInsets>
                   <Insets top="10.0" />
                </opaqueInsets>
@@ -114,23 +122,60 @@
                   <Insets top="10.0" />
                </padding>
                <children>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chose the action you want to do" wrappingWidth="184.9453125">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose a player" wrappingWidth="184.9453125">
                      <font>
                         <Font size="12.0" />
                      </font>
                   </Text>
-                  <Button fx:id="cocoBtn" mnemonicParsing="false" onAction="#goToCocoMenu" text="Add crocodile">
+                  <Button fx:id="player1Btn" mnemonicParsing="false" onAction="#goToMainMenuP1" text="Player 1">
                      <font>
                         <Font size="12.0" />
                      </font>
                   </Button>
-                  <Button fx:id="fruitBtn" mnemonicParsing="false" onAction="#goToFruitMenu" text="Add or remove fruit">
+                  <Button fx:id="player2Btn" mnemonicParsing="false" onAction="#goToMainMenuP2" text="Player 2">
                      <font>
                         <Font size="12.0" />
                      </font>
                   </Button>
                </children>
             </VBox>
+         </children>
+      </VBox>
+      <VBox fx:id="optionsVb" alignment="TOP_CENTER" layoutX="63.0" layoutY="559.0" prefHeight="331.0" prefWidth="213.0" spacing="20.0">
+         <opaqueInsets>
+            <Insets top="10.0" />
+         </opaqueInsets>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chose the action you want to do" wrappingWidth="184.9453125">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Text>
+            <Button fx:id="cocoBtn" mnemonicParsing="false" onAction="#goToCocoMenu" text="Add crocodile">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="fruitBtn" mnemonicParsing="false" onAction="#goToFruitMenu" text="Add or remove fruit">
+               <font>
+                  <Font size="12.0" />
+               </font>
+            </Button>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="goBackMainBtn" mnemonicParsing="false" onAction="#goBackToPlayers" text="Go back">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
          </children>
       </VBox>
    </children>

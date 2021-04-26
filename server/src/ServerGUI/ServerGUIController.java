@@ -17,6 +17,8 @@ public class ServerGUIController {
     @FXML
     private VBox fruitVb;
     @FXML
+    private VBox playerVb;
+    @FXML
     private ChoiceBox colorSelection;
     @FXML
     private ChoiceBox platformSelectionAdd;
@@ -25,13 +27,20 @@ public class ServerGUIController {
     @FXML
     private ChoiceBox lianaSelection;
     @FXML
+    private ChoiceBox fruitSelection;
+    @FXML
     private Button addCocoBtn;
     @FXML
     private Button addBananaBtn;
     @FXML
     private Button removeBananaBtn;
+    @FXML
+    private  Button player1Btn;
+    @FXML
+    private  Button player2Btn;
 
     private VBox curentVB;
+    private String playerSelected = "Player 1";
 
     ControlLists controlLists = ControlLists.getInstance();
 
@@ -109,8 +118,15 @@ public class ServerGUIController {
             platformSelectionRemove.getItems().add(controlLists.usedPlatfformList.get(i));
         }
 
+        fruitSelection.getItems().clear();
+        fruitSelection.getItems().add("Banana");
+        fruitSelection.getItems().add("Mango");
+        fruitSelection.getItems().add("Apple");
+
         platformSelectionAdd.getSelectionModel().selectFirst();
         platformSelectionRemove.getSelectionModel().selectFirst();
+        fruitSelection.getSelectionModel().selectFirst();
+
 
         curentVB = fruitVb;
     }
@@ -118,13 +134,21 @@ public class ServerGUIController {
     public String addCoco(ActionEvent actionEvent) {
         String cocoColorSelected = colorSelection.getSelectionModel().getSelectedItem().toString();
         String lianaSelected = lianaSelection.getSelectionModel().getSelectedItem().toString();
+        String cocoCode;
+
+        if(cocoColorSelected.equals("Red")){
+            cocoCode = "0";
+        }
+        else{
+            cocoCode = "1";
+        }
 
         this.controlLists.lianasList.remove(lianaSelected);
 
         mainVb.getChildren().remove(curentVB);
-        mainVb.getChildren().add(optionsVb);
+        mainVb.getChildren().add(playerVb);
 
-        String message = "1;"+cocoColorSelected+";"+lianaSelected;
+        String message = "1;"+cocoCode+";"+lianaSelected;
 
         System.out.println(message);
 
@@ -133,14 +157,26 @@ public class ServerGUIController {
 
     public String addBanana(ActionEvent actionEvent) {
         String selectedPlatform = platformSelectionAdd.getSelectionModel().getSelectedItem().toString();
+        String selectedFruit = fruitSelection.getSelectionModel().getSelectedItem().toString();
+        String fruitCode;
+
+        if(selectedFruit.equals("Banana")){
+            fruitCode = "0";
+        }
+        else if(selectedFruit.equals("Mango")){
+            fruitCode = "1";
+        }
+        else{
+            fruitCode = "2";
+        }
 
         mainVb.getChildren().remove(curentVB);
-        mainVb.getChildren().add(optionsVb);
+        mainVb.getChildren().add(playerVb);
 
         this.controlLists.availablePlatfformList.remove(selectedPlatform);
         this.controlLists.usedPlatfformList.add(selectedPlatform);
 
-        String message = "2;"+selectedPlatform;
+        String message = "2;"+fruitCode+";"+selectedPlatform;
 
         System.out.println(message);
 
@@ -152,16 +188,37 @@ public class ServerGUIController {
         String selectedPlatform = platformSelectionRemove.getSelectionModel().getSelectedItem().toString();
 
         mainVb.getChildren().remove(curentVB);
-        mainVb.getChildren().add(optionsVb);
+        mainVb.getChildren().add(playerVb);
 
         this.controlLists.usedPlatfformList.remove(selectedPlatform);
         this.controlLists.availablePlatfformList.add(selectedPlatform);
 
-        String message = "3;"+selectedPlatform;
+        String message = "3;Fruit;"+selectedPlatform;
 
         System.out.println(message);
 
         return message;
     }
 
+    public void goBackToPlayers(ActionEvent actionEvent) {
+        mainVb.getChildren().remove(optionsVb);
+        mainVb.getChildren().add(playerVb);
+    }
+
+    public void goToMainMenuP1(ActionEvent actionEvent) {
+        this.playerSelected = player1Btn.getText();
+        System.out.println(playerSelected);
+        goToMainMenu();
+    }
+
+    public void goToMainMenuP2(ActionEvent actionEvent) {
+        this.playerSelected = player2Btn.getText();
+        System.out.println(playerSelected);
+        goToMainMenu();
+    }
+
+    private void goToMainMenu() {
+        mainVb.getChildren().remove(playerVb);
+        mainVb.getChildren().add(optionsVb);
+    }
 }
