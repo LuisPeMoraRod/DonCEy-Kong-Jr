@@ -1,5 +1,3 @@
-package ServerGUI;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -43,12 +41,13 @@ public class ServerGUIController {
     @FXML
     private Button removeBananaBtn;
     @FXML
-    private  Button player1Btn;
+    private Button player1Btn;
     @FXML
-    private  Button player2Btn;
+    private Button player2Btn;
 
     private VBox curentVB;
     private String playerSelected = "Player 1";
+
 
     Scanner scn = new Scanner(System.in);
 
@@ -62,44 +61,6 @@ public class ServerGUIController {
     DataInputStream dis = new DataInputStream(s.getInputStream());
     DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
-    // sendMessage thread
-    Thread sendMessage = new Thread(new Runnable()
-    {
-        @Override
-        public void run() {
-            while (true) {
-
-                // read the message to deliver.
-                String msg = scn.nextLine();
-
-                try {
-                    // write on the output stream
-                    dos.writeUTF(msg);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    });
-
-    // readMessage thread
-    Thread readMessage = new Thread(new Runnable()
-    {
-        @Override
-        public void run() {
-
-            while (true) {
-                try {
-                    // read the message sent to this client
-                    String msg = dis.readUTF();
-                    System.out.println(msg);
-                } catch (IOException e) {
-
-                    e.printStackTrace();
-                }
-            }
-        }
-    });
 
 
     ControlLists controlLists = ControlLists.getInstance();
@@ -146,7 +107,7 @@ public class ServerGUIController {
 
     public void goToFruitMenu(ActionEvent actionEvent) {
 
-        if(controlLists.availablePlatfformList.size()==0){
+        if(controlLists.availablePlatformP1list.size()==0){
             platformSelectionAdd.setDisable(true);
             addBananaBtn.setDisable(true);
         }
@@ -156,7 +117,7 @@ public class ServerGUIController {
             addBananaBtn.setDisable(false);
         }
 
-        if(controlLists.usedPlatfformList.size()==0){
+        if(controlLists.usedPlatformP1List.size()==0){
             platformSelectionRemove.setDisable(true);
             removeBananaBtn.setDisable(true);
         }
@@ -171,14 +132,14 @@ public class ServerGUIController {
 
         platformSelectionAdd.getItems().clear();
 
-        for(int i = 0; i<controlLists.availablePlatfformList.size(); i++){
-            platformSelectionAdd.getItems().add(controlLists.availablePlatfformList.get(i));
+        for(int i = 0; i<controlLists.availablePlatformP1list.size(); i++){
+            platformSelectionAdd.getItems().add(controlLists.availablePlatformP1list.get(i));
         }
 
         platformSelectionRemove.getItems().clear();
 
-        for(int i = 0; i < controlLists.usedPlatfformList.size(); i++){
-            platformSelectionRemove.getItems().add(controlLists.usedPlatfformList.get(i));
+        for(int i = 0; i < controlLists.usedPlatformP1List.size(); i++){
+            platformSelectionRemove.getItems().add(controlLists.usedPlatformP1List.get(i));
         }
 
         fruitSelection.getItems().clear();
@@ -205,8 +166,6 @@ public class ServerGUIController {
         else{
             cocoCode = "1";
         }
-
-        this.controlLists.lianasList.remove(lianaSelected);
 
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(playerVb);
@@ -243,8 +202,8 @@ public class ServerGUIController {
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(playerVb);
 
-        this.controlLists.availablePlatfformList.remove(selectedPlatform);
-        this.controlLists.usedPlatfformList.add(selectedPlatform);
+        this.controlLists.availablePlatformP1list.remove(selectedPlatform);
+        this.controlLists.usedPlatformP1List.add(selectedPlatform);
 
         String message = "2;"+fruitCode+";"+selectedPlatform+"#"+this.playerSelected;
 
@@ -265,8 +224,8 @@ public class ServerGUIController {
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(playerVb);
 
-        this.controlLists.usedPlatfformList.remove(selectedPlatform);
-        this.controlLists.availablePlatfformList.add(selectedPlatform);
+        this.controlLists.usedPlatformP1List.remove(selectedPlatform);
+        this.controlLists.availablePlatformP1list.add(selectedPlatform);
 
         String message = "3;Fruit;"+selectedPlatform+"#"+this.playerSelected;
 
@@ -303,4 +262,5 @@ public class ServerGUIController {
         mainVb.getChildren().remove(playerVb);
         mainVb.getChildren().add(optionsVb);
     }
+
 }

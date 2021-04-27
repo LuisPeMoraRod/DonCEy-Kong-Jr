@@ -51,7 +51,7 @@ class ClientHandler implements Runnable
 
                 // search for the recipient in the connected devices list.
                 // ar is the vector storing client of active users
-                for (ClientHandler mc : Server.ar)
+                for (ClientHandler mc : Server.players)
                 {
                     // if the recipient is found, write on its
                     // output stream
@@ -64,13 +64,23 @@ class ClientHandler implements Runnable
 
             } catch (IOException e) {
 
-                e.printStackTrace();
+                try {
+                    Server.availableRoles.add(this.name);
+                    Server.players.remove(this);
+                    this.s.close();
+                    this.dis.close();
+                    this.dos.close();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
             }
 
         }
         try
         {
-            // closing resources
+            Server.availableRoles.add(this.name);
+            Server.players.remove(this);
+            this.s.close();
             this.dis.close();
             this.dos.close();
 

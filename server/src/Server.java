@@ -2,8 +2,6 @@
 // It contains two classes : Server and ClientHandler
 // Save file as Server.java
 
-import ServerGUI.ServerGUIMain;
-
 import java.io.*;
 import java.util.*;
 import java.net.*;
@@ -11,53 +9,93 @@ import java.net.*;
 // Server class
 public class Server
 {
+    static Vector<ClientHandler> players;
+    static Vector<String> availableRoles;
+    static int i;
+    Integer playersCount;
+    ServerSocket ss;
+    Socket s;
+    String playerName;
 
-    // Vector to store active clients
-    static Vector<ClientHandler> ar = new Vector<>();
+    public Server() throws IOException {
+        this.players = new Vector<>();
+        this.playersCount = 0;
+        this.ss  = new ServerSocket(1234);
+        this.availableRoles = new Vector<>();
+        availableRoles.add("Server");
+        availableRoles.add("Player 1");
+        availableRoles.add("Player 2");
 
-    // counter for clients
-    static int i = 0;
+        startServer();
+    }
 
-    public static void main(String[] args) throws IOException
+    public void startServer() throws IOException
     {
 
-        // server is listening on port 1234
-        ServerSocket ss = new ServerSocket(1234);
-
-        Socket s;
-
-        // running infinite loop for getting
-        // client request
-        while (true)
+        Thread listenForConnection = new Thread(new Runnable()
         {
-            // Accept the incoming request
-            s = ss.accept();
+            @Override
+            public void run() {
+                while (true)
+                {
+                    // Accept the incoming request
+                    playersCount = players.size();
 
-            System.out.println("New client request received : " + s);
+                    if(playersCount<3){
+                        System.out.println(players.size());
+                        System.out.println("Listening for connection....");
+                        try {
+                            s = ss.accept();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-            // obtain input and output streams
-            DataInputStream dis = new DataInputStream(s.getInputStream());
-            DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+                        System.out.println("New client request received : " + s);
 
-            System.out.println("Creating a new handler for this client...");
+                        // obtain input and output streams
+                        DataInputStream dis = null;
+                        try {
+                            dis = new DataInputStream(s.getInputStream());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        DataOutputStream dos = null;
+                        try {
+                            dos = new DataOutputStream(s.getOutputStream());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
-            // Create a new handler object for handling this request.
-            ClientHandler mtch = new ClientHandler(s,"Player " + i, dis, dos);
+                        System.out.println("Creating a new handler for this client...");
 
-            // Create a new Thread with this object.
-            Thread t = new Thread(mtch);
+                        playerName = availableRoles.get(0);
 
-            System.out.println("Adding this client to active client list");
+                        // Create a new handler object for handling this request.
+                        ClientHandler mtch = new ClientHandler(s,availableRoles.get(0), dis, dos);
 
-            // add this client to active clients list
-            ar.add(mtch);
 
-            // start the thread.
-            t.start();
+                        availableRoles.remove(0);
 
-            i++;
+                        // Create a new Thread with this object.
+                        Thread t = new Thread(mtch);
 
-        }
+                        System.out.println("Adding this client to active client list");
+
+                        // add this client to active clients list
+                        players.add(mtch);
+
+                        // start the thread.
+                        t.start();
+
+                    }
+
+                }
+            }
+        });
+
+        listenForConnection.start();
+
+
     }
 }
 

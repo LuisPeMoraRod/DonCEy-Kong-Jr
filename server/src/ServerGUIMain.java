@@ -1,5 +1,3 @@
-package ServerGUI;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,12 +12,13 @@ public class ServerGUIMain extends Application {
 
     public static void main(String[] args) {
 
-
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+
+        Server server = new Server();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ServerGUI.fxml"));
         Parent root = loader.load();
