@@ -27,7 +27,6 @@ public class ServerGUIMain extends Application {
 
         //ServerGUIController serverGUIController = loader.getController();
 
-
         primaryStage.setTitle("DonCE Kong JR. Server");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);

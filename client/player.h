@@ -7,6 +7,7 @@
 
 #include <SDL2/SDL.h>
 #include <stdbool.h>
+#include <pthread.h>
 #include "constants.h"
 #include "game.h"
 #include "fruits.h"
@@ -65,4 +66,5 @@ void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first);
 bool is_collision(int x0, int y0, int x1, int y1, int width, int height);
 bool win(struct player **donkey_jr_ptr);
 
+void* print_stats(struct player ** donkey_jr_ptr);
 #endif //CLIENT_PLAYER_H

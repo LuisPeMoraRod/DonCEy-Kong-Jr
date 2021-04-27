@@ -547,7 +547,7 @@ void fruit_collision(struct player **donkey_jr_ptr, struct fruit ** first){
             platform = temp_node->platform;
             delete_fruit(first, platform);
             donkey_jr->points += temp_node->points;
-            printf("%d", donkey_jr->points);
+            printf("Lives %d, points: %d, level: %d", donkey_jr->lives, donkey_jr->points, donkey_jr->level);
         }
         temp_node = temp_node->next_node;
     }
@@ -563,6 +563,7 @@ bool win(struct player **donkey_jr_ptr){
         SDL_Delay(DELAY_WIN);
         donkey_jr->pos.x = DK_X0;
         donkey_jr->pos.y = DK_Y0;
+        printf("Lives %d, points: %d, level: %d", donkey_jr->lives, donkey_jr->points, donkey_jr->level);
         return true;
     }
     return false;
@@ -599,6 +600,11 @@ bool death(struct player **donkey_jr_ptr){
         return true;
     }
     return false;
+}
+
+void *print_stats(struct player ** donkey_jr_ptr){
+    struct player * donkey_jr = *donkey_jr_ptr;
+    printf("Lives %d, points: %d, level: %d", donkey_jr->lives, donkey_jr->points, donkey_jr->level);
 }
 
 /**

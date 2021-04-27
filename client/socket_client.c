@@ -128,5 +128,3 @@ void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_
     pthread_create(&receiver_thread, NULL, &read_stream, &sock_info);
     //pthread_join(receiver_thread, NULL);
 }
-
-
