@@ -66,11 +66,12 @@ class ClientHandler implements Runnable
 
                 try {
                     this.isloggedin = false;
-                    System.out.println("Holi");
                     if(this.name.equals("Player 1")){
+                        ServerGUIController.controlLists.restartList("Player 1");
                         ServerGUIController.player1Active = false;
                     }
                     else{
+                        ServerGUIController.controlLists.restartList("Player 2");
                         ServerGUIController.player2Active = false;
                     }
 

@@ -67,7 +67,7 @@ public class ServerGUIController {
 
 
 
-    ControlLists controlLists = ControlLists.getInstance();
+    public static ControlLists controlLists = ControlLists.getInstance();
 
     public ServerGUIController() throws IOException {
     }
@@ -111,42 +111,80 @@ public class ServerGUIController {
 
     public void goToFruitMenu(ActionEvent actionEvent) {
 
-        if(controlLists.availablePlatformP1list.size()==0){
-            platformSelectionAdd.setDisable(true);
-            addBananaBtn.setDisable(true);
+        if(playerSelected.equals("Player 1")){
+            if(controlLists.availablePlatformP1list.size()==0){
+                platformSelectionAdd.setDisable(true);
+                addBananaBtn.setDisable(true);
+            }
+
+            else{
+                platformSelectionAdd.setDisable(false);
+                addBananaBtn.setDisable(false);
+            }
+
+            if(controlLists.usedPlatformP1List.size()==0){
+                platformSelectionRemove.setDisable(true);
+                removeBananaBtn.setDisable(true);
+            }
+
+            else{
+                platformSelectionRemove.setDisable(false);
+                removeBananaBtn.setDisable(false);
+            }
         }
 
         else{
-            platformSelectionAdd.setDisable(false);
-            addBananaBtn.setDisable(false);
+            if(controlLists.availablePlatformP2list.size()==0){
+                platformSelectionAdd.setDisable(true);
+                addBananaBtn.setDisable(true);
+            }
+
+            else{
+                platformSelectionAdd.setDisable(false);
+                addBananaBtn.setDisable(false);
+            }
+
+            if(controlLists.usedPlatformP2List.size()==0){
+                platformSelectionRemove.setDisable(true);
+                removeBananaBtn.setDisable(true);
+            }
+
+            else{
+                platformSelectionRemove.setDisable(false);
+                removeBananaBtn.setDisable(false);
+            }
         }
 
-        if(controlLists.usedPlatformP1List.size()==0){
-            platformSelectionRemove.setDisable(true);
-            removeBananaBtn.setDisable(true);
-        }
 
-        else{
-            platformSelectionRemove.setDisable(false);
-            removeBananaBtn.setDisable(false);
-        }
 
         mainVb.getChildren().remove(optionsVb);
         mainVb.getChildren().add(fruitVb);
 
         platformSelectionAdd.getItems().clear();
-
-        for(int i = 0; i<controlLists.availablePlatformP1list.size(); i++){
-            platformSelectionAdd.getItems().add(controlLists.availablePlatformP1list.get(i));
-        }
-
         platformSelectionRemove.getItems().clear();
 
-        for(int i = 0; i < controlLists.usedPlatformP1List.size(); i++){
-            platformSelectionRemove.getItems().add(controlLists.usedPlatformP1List.get(i));
+        if(playerSelected.equals("Player 1")){
+            for(int i = 0; i<controlLists.availablePlatformP1list.size(); i++){
+                platformSelectionAdd.getItems().add(controlLists.availablePlatformP1list.get(i));
+            }
+
+            for(int i = 0; i < controlLists.usedPlatformP1List.size(); i++){
+                platformSelectionRemove.getItems().add(controlLists.usedPlatformP1List.get(i));
+            }
+        }
+
+        else{
+            for(int i = 0; i<controlLists.availablePlatformP2list.size(); i++){
+                platformSelectionAdd.getItems().add(controlLists.availablePlatformP2list.get(i));
+            }
+
+            for(int i = 0; i < controlLists.usedPlatformP2List.size(); i++){
+                platformSelectionRemove.getItems().add(controlLists.usedPlatformP2List.get(i));
+            }
         }
 
         fruitSelection.getItems().clear();
+
         fruitSelection.getItems().add("Banana");
         fruitSelection.getItems().add("Mango");
         fruitSelection.getItems().add("Apple");
@@ -206,8 +244,15 @@ public class ServerGUIController {
         mainVb.getChildren().remove(curentVB);
         mainVb.getChildren().add(playerVb);
 
-        this.controlLists.availablePlatformP1list.remove(selectedPlatform);
-        this.controlLists.usedPlatformP1List.add(selectedPlatform);
+        if(playerSelected.equals("Player 1")){
+            this.controlLists.availablePlatformP1list.remove(selectedPlatform);
+            this.controlLists.usedPlatformP1List.add(selectedPlatform);
+        }
+        else{
+            this.controlLists.availablePlatformP2list.remove(selectedPlatform);
+            this.controlLists.usedPlatformP2List.add(selectedPlatform);
+        }
+
 
         String message = "2;"+fruitCode+";"+selectedPlatform+"#"+this.playerSelected;
 
