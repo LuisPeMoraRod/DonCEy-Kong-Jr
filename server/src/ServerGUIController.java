@@ -48,6 +48,10 @@ public class ServerGUIController {
     private VBox curentVB;
     private String playerSelected = "Player 1";
 
+    public static boolean player1Active;
+
+    public static boolean player2Active;
+
 
     Scanner scn = new Scanner(System.in);
 
@@ -249,13 +253,20 @@ public class ServerGUIController {
     public void goToMainMenuP1(ActionEvent actionEvent) {
         this.playerSelected = player1Btn.getText();
         System.out.println(playerSelected);
-        goToMainMenu();
+
+        if(player1Active){
+            goToMainMenu();
+        }
     }
 
     public void goToMainMenuP2(ActionEvent actionEvent) {
         this.playerSelected = player2Btn.getText();
         System.out.println(playerSelected);
-        goToMainMenu();
+
+        if(player2Active){
+            goToMainMenu();
+        }
+
     }
 
     private void goToMainMenu() {
