@@ -31,7 +31,7 @@ class ClientHandler implements Runnable
     public void run() {
 
         String received;
-        while (true)
+        while (this.isloggedin)
         {
             try
             {
@@ -67,8 +67,19 @@ class ClientHandler implements Runnable
             } catch (IOException e) {
 
                 try {
-                    Server.availableRoles.add(this.name);
+                    this.isloggedin = false;
+                    if(this.name.equals("Player 1")){
+                        ServerGUIController.controlLists.restartList("Player 1");
+                        ServerGUIController.player1Active = false;
+                    }
+                    else{
+                        ServerGUIController.controlLists.restartList("Player 2");
+                        ServerGUIController.player2Active = false;
+                    }
+
+                    Server.availableRoles.add(0, this.name);
                     Server.players.remove(this);
+
                     this.s.close();
                     this.dis.close();
                     this.dos.close();
@@ -78,16 +89,6 @@ class ClientHandler implements Runnable
             }
 
         }
-        try
-        {
-            Server.availableRoles.add(this.name);
-            Server.players.remove(this);
-            this.s.close();
-            this.dis.close();
-            this.dos.close();
 
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 }

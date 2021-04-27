@@ -71,7 +71,7 @@ public class Server
                         playerName = availableRoles.get(0);
 
                         // Create a new handler object for handling this request.
-                        ClientHandler mtch = new ClientHandler(s,availableRoles.get(0), dis, dos);
+                        ClientHandler mtch = new ClientHandler(s,playerName, dis, dos);
 
 
                         availableRoles.remove(0);
@@ -79,13 +79,22 @@ public class Server
                         // Create a new Thread with this object.
                         Thread t = new Thread(mtch);
 
-                        System.out.println("Adding this client to active client list");
+                        System.out.println("Adding this client "+playerName+ " to active client list");
 
                         // add this client to active clients list
                         players.add(mtch);
 
                         // start the thread.
                         t.start();
+
+                       if(players.size()>1){
+                           if(playerName.equals("Player 1")){
+                               ServerGUIController.player1Active = true;
+                           }
+                           else{
+                               ServerGUIController.player2Active = true;
+                           }
+                       }
 
                     }
 

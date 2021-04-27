@@ -27,13 +27,28 @@ public final class ControlLists {
         for (int i = 0; i<=9; i++){
             this.availablePlatformP1list.add(String.valueOf(i));
         }
+
+        for (int i = 0; i<=9; i++){
+            this.availablePlatformP2list.add(String.valueOf(i));
+        }
     }
 
-    public static List<String> restartList(List<String> list){
-        for (int i = 0; i<=9; i++){
-            list.add(String.valueOf(i));
+    public void restartList(String player){
+        if(player.equals("Player 1")){
+            availablePlatformP1list.clear();
+            for (int i = 0; i<=9; i++){
+                this.availablePlatformP1list.add(String.valueOf(i));
+            }
+            this.usedPlatformP1List.clear();
+
         }
-        return list;
+        else{
+            availablePlatformP2list.clear();
+            for (int i = 0; i<=9; i++){
+                this.availablePlatformP2list.add(String.valueOf(i));
+            }
+            this.usedPlatformP2List.clear();
+        }
     }
 
     public static ControlLists getInstance(){
