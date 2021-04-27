@@ -23,10 +23,13 @@ struct socket_info{
     struct node** last_croc;
     struct fruit** first_fruit;
     struct fruit** last_fruit;
+    bool is_player;
+    struct player ** donkey_jr_ptr;
 };
 void *read_stream(struct socket_info **socket_ptr);
-void *send_stream(void *socket_ptr);
+void send_stream(void *socket_ptr);
 
-void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc, struct fruit** first_fruit, struct fruit** last_fruit);
+int create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc,
+        struct fruit** first_fruit, struct fruit** last_fruit, bool player, struct player **donkey_jr_ptr, char client_mssg);
 
 #endif //CLIENT_SOCKET_CLIENT_H

@@ -138,12 +138,23 @@ void menu_loop(SDL_Window ** main_window_ptr, SDL_Renderer **renderer_ptr, SDL_T
                    if(x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN0_Y && y < (BTN0_Y + BTN_HEIGHT)){
                        quit = true;
                        close_window(main_window_ptr, &renderer, &background_texture); //delete current window
-                       start_game(1234); //start window game with socket in port 8080
+                       start_game(PORT, true, "0;0");
+
                    }else if (x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN1_Y && y < (BTN1_Y + BTN_HEIGHT)){
                        quit = true;
                        close_window(main_window_ptr, &renderer, &background_texture);
-                       start_game(1234);//start window game with socket in port 8081
-                   }
+                       start_game(PORT, true, "0;1");
+
+                   }else if(x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN2_Y && y < (BTN2_Y + BTN_HEIGHT)){
+                       quit = true;
+                       close_window(main_window_ptr, &renderer, &background_texture);
+                       start_game(PORT, false, "1;0");
+
+                   }else if(x > BTN0_X && x < (BTN0_X + BTN_WIDTH) && y > BTN3_Y && y < (BTN3_Y + BTN_HEIGHT)){
+                        quit = true;
+                        close_window(main_window_ptr, &renderer, &background_texture);
+                        start_game(PORT, false, "1;1");
+                    }
                 }
             }
         }

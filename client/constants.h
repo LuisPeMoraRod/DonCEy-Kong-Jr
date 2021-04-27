@@ -7,8 +7,7 @@
 #define CLIENT_CONSTANTS_H
 
 #define IP_ADDRESS "127.0.0.1"
-#define PORT0 8080
-#define PORT1 8081
+#define PORT 1234
 #define MAX_BUFFER 300
 #define SA struct sockaddr //socket address
 
@@ -102,6 +101,21 @@ int MOV_CROCS;
 #define ADD_CROC 1
 #define ADD_FRUIT 2
 #define DELETE_FRUIT 3
+#define MOVE_DK 4
+
+enum movements{
+    RIGHT_MOV,
+    LEFT_MOV,
+    UP_MOV,
+    DOWN_MOV,
+    JUMP_MOV
+};
+
+#define  RIGHT_MSSG "4;0"
+#define  LEFT_MSSG "4;1"
+#define  UP_MSSG "4;2"
+#define  DOWN_MSSG "4;3"
+#define  JUMP_MSSG "4;4"
 
 //croc type
 #define RED 0

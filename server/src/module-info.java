@@ -1,7 +1,8 @@
 module server {
-    requires javafx.controls;
+
     requires javafx.graphics;
+    requires javafx.controls;;
     requires javafx.fxml;
 
-    opens ServerGUI;
+    opens GUI;
 }
