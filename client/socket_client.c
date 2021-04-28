@@ -153,8 +153,9 @@ int create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_c
     sock_info->last_fruit = last_fruit;
     sock_info->is_player = player;
     sock_info->donkey_jr_ptr = donkey_jr_ptr;
-
-    send(sock, client_mssg, strlen(client_mssg), 0); //message to server to indicate if its a player or an observer
+    
+    char message[10] = "0;0";
+    send(sock, message, strlen(message), 0); //message to server to indicate if its a player or an observer
     fflush(stdout); //clear buffer
 
     pthread_create(&receiver_thread, NULL, &read_stream, &sock_info);

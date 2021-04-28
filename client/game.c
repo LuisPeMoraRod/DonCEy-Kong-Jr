@@ -218,7 +218,7 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
     pthread_create(&printer, NULL, &print_stats, &donkey_jr);
     pthread_join(printer, NULL);
     int socket;
-    char message;
+
     socket = create_socket(port, renderer_ptr, &first_croc, &last_croc, &first_fruit, &last_fruit, is_player, &donkey_jr, client_mssg);
     while(donkey_jr->lives >0 ){
 
@@ -262,8 +262,10 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
                             }else{
                                 move_right(&donkey_jr);
                             }
-                            message = RIGHT_MSSG;
-                            send(socket, message, strlen(message), 0);
+
+                            char message1[10] = "4;0";
+                            //message = RIGHT_MSSG;
+                            send(socket, message1, strlen(message1), 0);
                             break;
 
                         case SDLK_a: //move to the left
@@ -272,29 +274,35 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
                             }else{
                                 move_left(&donkey_jr);
                             }
-                            message = LEFT_MSSG;
-                            send(socket, message, strlen(message), 0);
+                            char message2[10] = "4;1";
+                            //message = LEFT_MSSG;
+                            send(socket, message2, strlen(message2), 0);
                             break;
 
                         case SDLK_w: //climb is_up the liana
                             if(donkey_jr->liana){
                                 move_up(&donkey_jr);
                             }
-                            message = UP_MSSG;
-                            send(socket, message, strlen(message), 0);
+                            char message3[10] = "4;2";
+                            //message = UP_MSSG;
+                            send(socket, message3, strlen(message3), 0);
                             break;
 
                         case SDLK_s:
                             if(donkey_jr->liana){
                                 move_down(&donkey_jr);
                             }
-                            message = DOWN_MSSG;
-                            send(socket, message, strlen(message), 0);
+
+                            char message4[10] = "4;3";
+                            //message = DOWN_MSSG;
+                            send(socket, message4, strlen(message4), 0);
                             break;
 
                         case SDLK_SPACE:
-                            message = JUMP_MSSG;
-                            send(socket, message, strlen(message), 0);
+
+                            //char message0[10] = "4;4";
+                            //message = JUMP_MSSG;
+                            //send(socket, message0, strlen(message0), 0);
                             jump(&donkey_jr);
                             break;
 
