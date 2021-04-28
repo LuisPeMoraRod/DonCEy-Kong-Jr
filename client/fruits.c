@@ -3,7 +3,16 @@
 //
 
 #include "fruits.h"
-
+/**
+ * Method to create new fruit struct
+ * @param first
+ * @param last
+ * @param renderer_ptr
+ * @param platform
+ * @param fruit_type
+ * @param points
+ * @return
+ */
 struct fruit * create_fruit(struct fruit ** first, struct fruit **last, SDL_Renderer **renderer_ptr, int platform, int fruit_type, int points){
     size_t size = sizeof(struct fruit);
     struct fruit * fruit_ptr = malloc(size);
@@ -48,6 +57,12 @@ void set_fruit_pos(int x, int y, struct fruit ** fruit_ptr){
     fruit->pos = pos_rect;
 }
 
+/**
+ * Adds fruit struct to linked list
+ * @param first
+ * @param last
+ * @param new_fruit_ptr
+ */
 void add_fruit(struct fruit **first, struct fruit **last, struct fruit ** new_fruit_ptr){
     struct fruit * new_fruit = *new_fruit_ptr;
     if((*first == NULL) && (*last == NULL)){
@@ -61,6 +76,11 @@ void add_fruit(struct fruit **first, struct fruit **last, struct fruit ** new_fr
     }
 }
 
+/**
+ * Method for graphic rendering of fruits linked list
+ * @param renderer_ptr
+ * @param first
+ */
 void render_fruits(SDL_Renderer ** renderer_ptr, struct fruit **first){
     struct fruit *temp_ptr = *first;
         SDL_Rect * pos = NULL;
@@ -73,6 +93,11 @@ void render_fruits(SDL_Renderer ** renderer_ptr, struct fruit **first){
         }
 }
 
+/**
+ * Set fruit visible flag to false
+ * @param first
+ * @param platform
+ */
 void delete_fruit(struct fruit ** first, int platform){
     struct fruit * temp_fruit = *first;
     while(temp_fruit != NULL){
@@ -83,7 +108,11 @@ void delete_fruit(struct fruit ** first, int platform){
     }
 }
 
-
+/**
+ * Free resources taken by fruits linked list
+ * @param first
+ * @param platform
+ */
 void free_fruits_list(struct fruit ** first){
     struct fruit *temp_ptr = *first;
     struct fruit *temp_ptr2;

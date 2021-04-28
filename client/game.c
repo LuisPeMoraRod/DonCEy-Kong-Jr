@@ -9,7 +9,7 @@
 /**
  * Attempts to initialize and SDL window. In case of success, begins game loop.
  */
-void * start_game(int port){
+void * start_game(int port, bool is_player, char client_mssg){
     //The window to be rendering
     SDL_Window* window = NULL;
 
@@ -39,7 +39,7 @@ void * start_game(int port){
                 while (player_stats->lives > 0){
                     player_stats = game_loop(port, &window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
                 }*/
-                game_loop(port, &window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points);
+                game_loop(port, &window, &renderer, &background_texture, player_stats->lives, player_stats->level, player_stats->points, is_player, client_mssg);
                 free(player_stats);
 
             } else {
@@ -191,7 +191,7 @@ void add_static_textures(SDL_Renderer ** renderer_ptr){
  * @param renderer_ptr: SDL_Renderer **
  * @param bg_txtr_ptr: SDL_Texture **
  */
-void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points){
+void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, SDL_Texture **bg_txtr_ptr, int lives, int level, int points, bool is_player, char client_mssg){
     SDL_Renderer *renderer = *renderer_ptr;
     SDL_Texture *background_texture = *bg_txtr_ptr;
 
@@ -213,7 +213,13 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
     struct fruit * last_fruit = NULL;
     struct fruit * temp_fruit = NULL;
 
-    create_socket(port, renderer_ptr, &first_croc, &last_croc, &first_fruit, &last_fruit);
+    //display current stats in console
+    pthread_t printer;
+    pthread_create(&printer, NULL, &print_stats, &donkey_jr);
+    pthread_join(printer, NULL);
+    int socket;
+    char message;
+    socket = create_socket(port, renderer_ptr, &first_croc, &last_croc, &first_fruit, &last_fruit, is_player, &donkey_jr, client_mssg);
     while(donkey_jr->lives >0 ){
 
         //Main loop flag
@@ -247,7 +253,7 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
                 {
                     quit = true;
                     donkey_jr->lives = 0;
-                } else if (event.type == SDL_KEYDOWN && !donkey_jr->is_dead){
+                } else if (event.type == SDL_KEYDOWN && !donkey_jr->is_dead && is_player){
                     switch (event.key.keysym.sym) {
 
                         case SDLK_d: //move to the right
@@ -256,6 +262,8 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
                             }else{
                                 move_right(&donkey_jr);
                             }
+                            message = RIGHT_MSSG;
+                            send(socket, message, strlen(message), 0);
                             break;
 
                         case SDLK_a: //move to the left
@@ -264,21 +272,29 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
                             }else{
                                 move_left(&donkey_jr);
                             }
+                            message = LEFT_MSSG;
+                            send(socket, message, strlen(message), 0);
                             break;
 
                         case SDLK_w: //climb is_up the liana
                             if(donkey_jr->liana){
                                 move_up(&donkey_jr);
                             }
+                            message = UP_MSSG;
+                            send(socket, message, strlen(message), 0);
                             break;
 
                         case SDLK_s:
                             if(donkey_jr->liana){
                                 move_down(&donkey_jr);
                             }
+                            message = DOWN_MSSG;
+                            send(socket, message, strlen(message), 0);
                             break;
 
                         case SDLK_SPACE:
+                            message = JUMP_MSSG;
+                            send(socket, message, strlen(message), 0);
                             jump(&donkey_jr);
                             break;
 
@@ -334,13 +350,12 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
             SDL_Delay( DELAY );
         }
 
-/*
+        /*
         size_t size = sizeof (struct stats);
         struct stats * next_stats = malloc(size);
         next_stats->lives = donkey_jr->lives;
         next_stats->level += 1;
         next_stats->points = donkey_jr->points;*/
-
 
     }
 
@@ -348,6 +363,7 @@ void game_loop(int port, SDL_Window ** window_ptr, SDL_Renderer **renderer_ptr, 
     free_player(&donkey_jr); //free resources
     free_croc_list(&first_croc);
     free_fruits_list(&first_fruit);
+    close(socket);
 
     //return next_stats;
 }

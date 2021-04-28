@@ -64,6 +64,31 @@ void *read_stream(struct socket_info **socket_ptr){
                     }
                 }else if(action == DELETE_FRUIT){
                     delete_fruit(sock->first_fruit, pos);
+                }else if(action == MOVE_DK && !sock->is_player){
+                    struct player *donkey_jr = *sock->donkey_jr_ptr;
+                    if(type == RIGHT_MOV){
+                        if(donkey_jr->liana){
+                            r_side_liana(&donkey_jr);
+                        }else{
+                            move_right(&donkey_jr);
+                        }
+                    }else if (type == LEFT_MOV){
+                        if(donkey_jr->liana){
+                            l_side_liana(&donkey_jr);
+                        }else{
+                            move_left(&donkey_jr);
+                        }
+                    }else if (type == UP_MOV){
+                        if(donkey_jr->liana){
+                            move_up(&donkey_jr);
+                        }
+                    }else if (type == DOWN_MOV){
+                        if(donkey_jr->liana){
+                            move_down(&donkey_jr);
+                        }
+                    }else if(type == JUMP_MOV){
+                        jump(&donkey_jr);
+                    }
                 }
             }
             fflush(stdout); //clear the buffer
@@ -71,12 +96,13 @@ void *read_stream(struct socket_info **socket_ptr){
     }
 }
 
-void *send_stream(void *socket_ptr){
+/*
+void send_stream(void *socket_ptr){
     int socket = *(int*)socket_ptr;
-    char message[40];
+    char client_mssg[3] = "";
     //for(;;){
-        printf("Write message to java server: ");
-        scanf("%s", message);
+        //printf("Write message to java server: ");
+        //scanf("%s", message);
         //char end[1] = ".";
         //strcat(message, end);
         send(socket, message, strlen(message), 0);
@@ -88,10 +114,11 @@ void *send_stream(void *socket_ptr){
         }
         fflush(stdout); //clear the buffer
     //}
-}
+}*/
 
-void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc, struct fruit** first_fruit, struct fruit** last_fruit){
-    pthread_t sender_thread, receiver_thread;
+int create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_croc, struct node** last_croc,
+        struct fruit** first_fruit, struct fruit** last_fruit, bool player, struct player **donkey_jr_ptr, char client_mssg){
+    pthread_t receiver_thread;
     int sock = 0;
     struct sockaddr_in serv_addr;
     char buffer[MAX_BUFFER] = {0};
@@ -124,9 +151,13 @@ void create_socket(int port, SDL_Renderer ** renderer_ptr, struct node ** first_
     sock_info->renderer = renderer_ptr;
     sock_info->first_fruit = first_fruit;
     sock_info->last_fruit = last_fruit;
+    sock_info->is_player = player;
+    sock_info->donkey_jr_ptr = donkey_jr_ptr;
+
+    send(sock, client_mssg, strlen(client_mssg), 0); //message to server to indicate if its a player or an observer
+    fflush(stdout); //clear buffer
 
     pthread_create(&receiver_thread, NULL, &read_stream, &sock_info);
-    //pthread_join(receiver_thread, NULL);
+
+    return sock;
 }
-
-
