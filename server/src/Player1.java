@@ -5,7 +5,7 @@ import java.io.*;
 import java.net.*;
 import java.util.Scanner;
 
-public class Client3
+public class Player1
 {
     final static int ServerPort = 1234;
 

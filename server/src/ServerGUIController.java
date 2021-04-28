@@ -53,16 +53,12 @@ public class ServerGUIController {
     public static boolean player2Active;
 
 
-    Scanner scn = new Scanner(System.in);
-
     // getting localhost ip
     InetAddress ip = InetAddress.getByName("localhost");
 
     // establish the connection
     Socket s = new Socket(ip, 1234);
 
-    // obtaining input and out streams
-    DataInputStream dis = new DataInputStream(s.getInputStream());
     DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 
 
